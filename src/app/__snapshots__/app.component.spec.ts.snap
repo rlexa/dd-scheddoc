@@ -3,7 +3,7 @@
 exports[`AppComponent renders 1`] = `
 <mock-render>
   <app-root>
-    TODO
+    <router-outlet />
   </app-root>
 </mock-render>
 `;
