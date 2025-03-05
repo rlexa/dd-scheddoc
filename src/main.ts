@@ -1,14 +1,12 @@
 import {provideHttpClient} from '@angular/common/http';
 import {LOCALE_ID, provideAppInitializer, provideExperimentalZonelessChangeDetection} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {AppComponent} from './app/app.component';
 import {initializeLocaleFactory} from './locale';
 
 bootstrapApplication(AppComponent, {
   providers: [
     // ng
-    provideAnimationsAsync(),
     provideHttpClient(),
     provideExperimentalZonelessChangeDetection(),
     // local
