@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainComponent renders 1`] = `
+<mock-render>
+  <app-main>
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <nav />
+        <span
+          class="um-flex-spacer"
+        />
+        <span
+          class="um-margin-left-wide"
+        >
+          SchedDoc
+        </span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div
+      class="um-space-container"
+    >
+      <div
+        class="um-space-container-content"
+      >
+        <router-outlet />
+      </div>
+    </div>
+  </app-main>
+</mock-render>
+`;

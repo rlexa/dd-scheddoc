@@ -1,0 +1,73 @@
+%sd-match-parent,
+.sd-match-parent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.sd-flex-spacer {
+  flex: 1 1 auto;
+}
+
+.sd-flex-end {
+  justify-content: end;
+}
+
+.sd-space-container {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  flex: 1 1 auto;
+
+  > .sd-space-container-content {
+    @extend %sd-match-parent;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+}
+
+%sd-bar-h,
+.sd-bar-h {
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  align-items: center;
+}
+
+.sd-bar-v {
+  @extend %sd-bar-h;
+  flex-direction: column;
+}
+
+%sd-list-h,
+.sd-list-h {
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.sd-list-v {
+  @extend %sd-list-h;
+  flex-direction: column;
+}
+
+.sd-list-item {
+  position: relative;
+  box-sizing: border-box;
+
+  .sd-list-item-content {
+    @extend %sd-match-parent;
+  }
+}
+
+.sd-text-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sd-border-radius {
+  border-radius: 0.3em;
+}

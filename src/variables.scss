@@ -1,0 +1,95 @@
+@use 'sass:color';
+
+@mixin add_customVars_toClassStyles($key-value-map, $prefix-class, $prefix, $class, $style) {
+  @each $key, $val in $key-value-map {
+    .#{$prefix-class}-#{$class}-#{$key} {
+      #{$style}: var(--#{$prefix}-#{$key});
+    }
+  }
+}
+
+@mixin add_customVars($key-value-map, $prefix) {
+  @each $key, $val in $key-value-map {
+    --#{$prefix}-#{$key}: #{$val};
+  }
+}
+
+@mixin add_customVars_inRoot($key-value-map, $prefix) {
+  :root {
+    @include add_customVars($key-value-map, $prefix);
+  }
+}
+
+// MARGIN
+
+$margin: (
+  'narrow': 0.25rem,
+  'default': 0.5rem,
+  'wide': 0.75rem,
+);
+
+@include add_customVars_inRoot($margin, 'sd-margin');
+@include add_customVars_toClassStyles($margin, 'sd', 'sd-margin', 'margin', 'margin');
+@include add_customVars_toClassStyles($margin, 'sd', 'sd-margin', 'margin-left', 'margin-left');
+@include add_customVars_toClassStyles($margin, 'sd', 'sd-margin', 'margin-top', 'margin-top');
+@include add_customVars_toClassStyles($margin, 'sd', 'sd-margin', 'margin-right', 'margin-right');
+@include add_customVars_toClassStyles($margin, 'sd', 'sd-margin', 'margin-bottom', 'margin-bottom');
+
+// PADDING
+
+$padding: (
+  'narrow': 0.25rem,
+  'default': 0.5rem,
+  'wide': 0.75rem,
+);
+
+@include add_customVars_inRoot($padding, 'sd-padding');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-padding', 'padding', 'padding');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-padding', 'padding-left', 'padding-left');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-padding', 'padding-top', 'padding-top');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-padding', 'padding-right', 'padding-right');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-padding', 'padding-bottom', 'padding-bottom');
+
+// GAP
+
+$gap: (
+  'narrow': 0.25rem,
+  'default': 0.5rem,
+  'wide': 0.75rem,
+);
+
+@include add_customVars_inRoot($gap, 'sd-gap');
+@include add_customVars_toClassStyles($padding, 'sd', 'sd-gap', 'gap', 'gap');
+
+// RADIUS
+
+$radius: (
+  'narrow': 0.075rem,
+  'default': 0.15rem,
+  'wide': 0.225rem,
+);
+
+@include add_customVars_inRoot($radius, 'sd-radius');
+@include add_customVars_toClassStyles($radius, 'sd', 'sd-radius', 'border-radius', 'border-radius');
+
+// FONT-SIZE
+
+$font-size: (
+  'small': var(--mat-sys-label-small-size),
+  'medium': var(--mat-sys-label-medisd-size),
+  'large': var(--mat-sys-label-large-size),
+);
+
+@include add_customVars_inRoot($font-size, 'sd-font-size');
+@include add_customVars_toClassStyles($font-size, 'sd', 'sd-font-size', 'font-size', 'font-size');
+
+:root {
+  --sd-color-border: var(--mat-sys-outline-variant);
+  --sd-color-error: var(--mat-sys-error);
+  --sd-color-hover: var(--mat-sys-outline-variant);
+  --sd-color-info: var(--mat-sys-secondary);
+  --sd-color-scrollbar-thumb: var(--mat-sys-tertiary);
+  --sd-color-scrollbar-track: var(--mat-sys-shadow);
+  --sd-color-success: green;
+  --sd-color-warning: orangered;
+}

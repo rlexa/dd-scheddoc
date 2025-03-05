@@ -1,0 +1,34 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  height: 0.7rem;
+  width: 0.7rem;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-track);
+  box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-track);
+  border-radius: 0.1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-thumb);
+  box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-thumb);
+  border-radius: 0.7rem;
+}
