@@ -7,20 +7,55 @@ exports[`MainComponent renders 1`] = `
       <mat-toolbar-row>
         <nav />
         <span
-          class="um-flex-spacer"
+          class="sd-flex-spacer"
         />
         <span
-          class="um-margin-left-wide"
+          class="sd-margin-left-wide sd-margin-right-wide"
         >
           SchedDoc
         </span>
+        <span
+          class="sd-flex-spacer"
+        />
+        <mat-menu>
+          <button
+            disabled=""
+            mat-menu-item=""
+            ng-reflect-disabled=""
+          >
+            <mat-icon>
+              person
+            </mat-icon>
+            <span>
+              displayName
+            </span>
+          </button>
+          <button
+            mat-menu-item=""
+          >
+            <mat-icon>
+              logout
+            </mat-icon>
+            <span>
+              Ausloggen
+            </span>
+          </button>
+        </mat-menu>
+        <button
+          class="avatar-image"
+          mat-card-avatar=""
+          mat-icon-button=""
+          ng-reflect-menu="[object Object]"
+          style="background-image: url(photoURL);"
+        >
+        </button>
       </mat-toolbar-row>
     </mat-toolbar>
     <div
-      class="um-space-container"
+      class="sd-space-container"
     >
       <div
-        class="um-space-container-content"
+        class="sd-space-container-content"
       >
         <router-outlet />
       </div>

@@ -1,15 +1,42 @@
+@let user = user$ | async;
+
 <mat-toolbar>
   <mat-toolbar-row>
     <nav>
       <!-- <a mat-button [routerLink]="RouteCommunes" routerLinkActive="active">Kommunen</a> -->
     </nav>
-    <span class="um-flex-spacer"></span>
-    <span class="um-margin-left-wide">SchedDoc</span>
+    <span class="sd-flex-spacer"></span>
+    <span class="sd-margin-left-wide sd-margin-right-wide">SchedDoc</span>
+    <span class="sd-flex-spacer"></span>
+    @if (user) {
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>person</mat-icon>
+          <span>{{ user.displayName || user.email }}</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Ausloggen</span>
+        </button>
+      </mat-menu>
+
+      <button
+        mat-icon-button
+        mat-card-avatar
+        class="avatar-image"
+        [style.background-image]="'url(' + user.photoURL + ')'"
+        [matMenuTriggerFor]="menu"
+      >
+        @if (!user.photoURL) {
+          <mat-icon>person</mat-icon>
+        }
+      </button>
+    }
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="um-space-container">
-  <div class="um-space-container-content">
+<div class="sd-space-container">
+  <div class="sd-space-container-content">
     <router-outlet />
   </div>
 </div>

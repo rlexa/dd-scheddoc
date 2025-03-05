@@ -22,13 +22,13 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-track);
-  box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-track);
+  -webkit-box-shadow: inset 0 0 0.4rem var(--sd-color-scrollbar-track);
+  box-shadow: inset 0 0 0.4rem var(--sd-color-scrollbar-track);
   border-radius: 0.1rem;
 }
 
 ::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-thumb);
-  box-shadow: inset 0 0 0.4rem var(--um-color-scrollbar-thumb);
+  -webkit-box-shadow: inset 0 0 0.4rem var(--sd-color-scrollbar-thumb);
+  box-shadow: inset 0 0 0.4rem var(--sd-color-scrollbar-thumb);
   border-radius: 0.7rem;
 }
