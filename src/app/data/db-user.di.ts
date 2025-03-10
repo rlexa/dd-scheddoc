@@ -1,0 +1,27 @@
+import {inject, InjectionToken} from '@angular/core';
+import {doc, docData, Firestore} from '@angular/fire/firestore';
+import {catchError, map, Observable, of, switchMap} from 'rxjs';
+import {DiUser} from './active';
+import {DbUser} from './db';
+
+export const DiDbUser = new InjectionToken<Observable<DbUser | null>>('Current DB user.', {
+  providedIn: 'root',
+  factory: () => {
+    const api = inject(Firestore);
+    const user$ = inject(DiUser);
+
+    return user$.pipe(
+      switchMap((user) =>
+        !user
+          ? of<DbUser | null>(null)
+          : docData(doc(api, 'user', user.uid), {idField: 'id'}).pipe(
+              map((ii) => ii as DbUser),
+              catchError((err) => {
+                console.error('Failed to fetch DB user.', err);
+                return of<DbUser | null>(null);
+              }),
+            ),
+      ),
+    );
+  },
+});

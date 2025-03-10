@@ -18,7 +18,7 @@ export class SignInDirective implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.unsub = this.auth.onAuthStateChanged((user) => {
-      this.user$.next(user ?? undefined);
+      this.user$.next(user ?? null);
       if (!user) {
         this.login();
       }
