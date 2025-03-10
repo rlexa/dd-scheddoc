@@ -9,7 +9,6 @@ import {RouterModule} from '@angular/router';
 import {DiIsAdmin} from 'src/app/data';
 import {DiUser} from 'src/app/data/active';
 import {RouteUsers} from 'src/routing';
-import {SignInDirective} from './sign-in';
 
 @Component({
   selector: 'app-main',
@@ -36,7 +35,6 @@ import {SignInDirective} from './sign-in';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, RouterModule],
-  hostDirectives: [SignInDirective],
 })
 export class MainComponent {
   private readonly auth = inject(Auth);

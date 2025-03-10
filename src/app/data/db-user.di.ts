@@ -1,6 +1,6 @@
 import {inject, InjectionToken} from '@angular/core';
 import {doc, docData, Firestore} from '@angular/fire/firestore';
-import {catchError, map, Observable, of, switchMap} from 'rxjs';
+import {catchError, filter, map, Observable, of, switchMap} from 'rxjs';
 import {DiUser} from './active';
 import {DbUser} from './db';
 
@@ -11,6 +11,7 @@ export const DiDbUser = new InjectionToken<Observable<DbUser | null>>('Current D
     const user$ = inject(DiUser);
 
     return user$.pipe(
+      filter((user) => user !== undefined),
       switchMap((user) =>
         !user
           ? of<DbUser | null>(null)
