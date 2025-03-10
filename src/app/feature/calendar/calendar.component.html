@@ -1,3 +1,11 @@
 @if (id$ | async; as id) {
-  <div class="sd-padding-wide">TODO</div>
+  <div class="sd-padding-wide sd-list-v sd-gap-wide">
+    <mat-button-toggle-group [style.align-self]="'center'" name="Monat" [(ngModel)]="selectedDate">
+      @for (dat of dates; track $index) {
+        <mat-button-toggle [value]="dat">{{ dat | date: 'MMM' }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
+    <app-month [dateMonth]="selectedDate" />
+  </div>
 }

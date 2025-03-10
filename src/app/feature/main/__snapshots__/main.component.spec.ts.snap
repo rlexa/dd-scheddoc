@@ -31,9 +31,6 @@ exports[`MainComponent renders 1`] = `
         >
           SchedDoc
         </span>
-        <span
-          class="sd-flex-spacer"
-        />
         <mat-menu>
           <button
             disabled=""
