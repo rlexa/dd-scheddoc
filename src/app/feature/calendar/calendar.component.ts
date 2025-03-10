@@ -28,8 +28,6 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     const now = new Date();
-    const last = new Date(now);
-    last.setMonth(now.getMonth() - 1);
     const next0 = new Date(now);
     next0.setMonth(now.getMonth() + 1);
     const next1 = new Date(now);
@@ -37,9 +35,9 @@ export class CalendarComponent implements OnInit {
     const next2 = new Date(now);
     next2.setMonth(now.getMonth() + 3);
 
-    this.dates = [last, now, next0, next1, next2].map(
+    this.dates = [now, next0, next1, next2].map(
       (ii) => `${strPadStartWithZero4(ii.getFullYear().toString())}-${strPadStartWithZero2((ii.getMonth() + 1).toString())}T00:00:00.000`,
     );
-    this.selectedDate = this.dates[2];
+    this.selectedDate = this.dates[1];
   }
 }
