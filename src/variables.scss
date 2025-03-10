@@ -84,6 +84,7 @@ $font-size: (
 @include add_customVars_toClassStyles($font-size, 'sd', 'sd-font-size', 'font-size', 'font-size');
 
 :root {
+  --sd-color-bg-weekend: var(--mat-sys-neutral10);
   --sd-color-border: var(--mat-sys-outline-variant);
   --sd-color-error: var(--mat-sys-error);
   --sd-color-hover: var(--mat-sys-outline-variant);
