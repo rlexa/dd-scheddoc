@@ -1,0 +1,24 @@
+@let user = user$ | async;
+
+<div class="sd-padding-wide sd-list-v sd-gap-wide">
+  <h2>{{ user?.name ?? '???' }}</h2>
+  <form class="sd-grid-repeat">
+    <mat-form-field>
+      <mat-label>Gruppe</mat-label>
+      <mat-select [formControl]="formGroup.controls.group">
+        @for (group of groups; track group) {
+          <mat-option [value]="group">{{ group }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Qualifikation</mat-label>
+      <mat-select [formControl]="formGroup.controls.qualification">
+        @for (qualification of qualifications; track qualification) {
+          <mat-option [value]="qualification">{{ qualificationsGerman[qualification] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>

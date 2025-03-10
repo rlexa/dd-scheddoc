@@ -2,3 +2,11 @@
 @use 'native.scss';
 @use 'layout.scss';
 @use 'material.scss';
+
+.sd-grid-repeat {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  column-gap: var(--sd-gap-wide);
+  row-gap: var(--sd-gap-default);
+  box-sizing: border-box;
+}
