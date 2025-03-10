@@ -6,7 +6,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {RouterModule} from '@angular/router';
+import {DiIsAdmin} from 'src/app/data';
 import {DiUser} from 'src/app/data/active';
+import {RouteUsers} from 'src/routing';
 import {SignInDirective} from './sign-in';
 
 @Component({
@@ -25,8 +27,7 @@ import {SignInDirective} from './sign-in';
 
           nav {
             .active {
-              background-color: var(--mat-sys-tertiary-container);
-              color: var(--mat-sys-on-tertiary-container);
+              background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
             }
           }
 
@@ -48,7 +49,10 @@ import {SignInDirective} from './sign-in';
 })
 export class MainComponent {
   private readonly auth = inject(Auth);
+  protected readonly isAdmin$ = inject(DiIsAdmin);
   protected readonly user$ = inject(DiUser);
+
+  protected readonly RouteUsers = RouteUsers;
 
   protected async logout() {
     try {

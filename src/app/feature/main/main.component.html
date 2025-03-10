@@ -1,10 +1,13 @@
 @let user = user$ | async;
+@let isAdmin = isAdmin$ | async;
 @let userAvatar = !user?.photoURL ? '"favicon.ico"' : '"' + user!.photoURL + '"';
 
 <mat-toolbar>
   <mat-toolbar-row>
     <nav>
-      <!-- <a mat-button [routerLink]="RouteCommunes" routerLinkActive="active">Kommunen</a> -->
+      @if (isAdmin) {
+        <a mat-button [routerLink]="RouteUsers" routerLinkActive="active">Benutzer</a>
+      }
     </nav>
     <span class="sd-flex-spacer"></span>
     <span class="sd-margin-left-wide sd-margin-right-wide">SchedDoc</span>

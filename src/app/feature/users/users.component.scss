@@ -1,0 +1,29 @@
+:host {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+
+  .list {
+    border-right: 1px solid var(--sd-color-border);
+
+    .list-item {
+      height: 50px;
+      cursor: pointer;
+
+      &:hover,
+      &.active {
+        background-color: var(--sd-color-hover);
+      }
+    }
+
+    .selected-name {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+
+    &:not(.show-name-only) {
+      min-width: 15rem;
+    }
+  }
+}

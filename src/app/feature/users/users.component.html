@@ -1,0 +1,54 @@
+USERS TODO
+
+<!-- @let request = request$ | async;
+@let error = request?.error;
+@let body = request?.body;
+@let items = body?.data ?? [];
+@let selectedName = selectedName$ | async;
+
+<div
+  class="list um-list-v um-padding-default um-gap-default"
+  (mouseenter)="pointerInList = true"
+  (mouseleave)="pointerInList = false"
+  [class.show-name-only]="!!selectedName && !pointerInList"
+>
+  @if (!selectedName || pointerInList) {
+    <h5 [style.text-align]="'center'">Kommune</h5>
+
+    @if (error) {
+      <div class="um-flex-spacer">
+        <app-message flavor="error">
+          <span>{{ error | errorString }}</span>
+        </app-message>
+      </div>
+    } @else {
+      <cdk-virtual-scroll-viewport itemSize="50" class="um-flex-spacer">
+        <div
+          *cdkVirtualFor="let item of items; trackBy: trackBy"
+          class="list-item um-list-item um-border-radius"
+          [routerLink]="item.id + ''"
+          routerLinkActive="active"
+        >
+          <div class="um-list-item-content um-bar-h um-padding-narrow">
+            <span class="um-text-ellipsis">
+              {{ item.name }}
+            </span>
+          </div>
+        </div>
+      </cdk-virtual-scroll-viewport>
+    }
+    <div class="um-bar-h um-flex-end um-padding-default um-font-size-medium">
+      <span>{{ items.length }}/{{ body?.count ?? 0 }}</span>
+    </div>
+  } @else {
+    <div class="selected-name">
+      <span>{{ selectedName }}</span>
+    </div>
+  }
+</div>
+
+<div class="um-space-container">
+  <div class="um-space-container-content">
+    <router-outlet />
+  </div>
+</div> -->

@@ -1,5 +1,10 @@
+export enum DbUserGroup {
+  Admin = 'admin',
+  User = 'user',
+}
+
 export interface DbUser {
-  group?: string | null;
+  group?: DbUserGroup | null;
   id?: string | null;
   name?: string | null;
   qualification?: string | null;
