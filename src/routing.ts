@@ -1,3 +1,4 @@
+export const RouteCalendar = 'ca';
 export const RouteMain = 'ui';
 export const RouteUsers = 'us';
 

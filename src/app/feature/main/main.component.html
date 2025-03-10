@@ -4,6 +4,7 @@
 <mat-toolbar>
   <mat-toolbar-row>
     <nav>
+      <a mat-button [routerLink]="RouteCalendar" routerLinkActive="active">Kalendar</a>
       @if (isAdmin) {
         <a mat-button [routerLink]="RouteUsers" routerLinkActive="active">Benutzer</a>
       }

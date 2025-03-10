@@ -8,6 +8,14 @@ exports[`MainComponent renders 1`] = `
         <nav>
           <a
             mat-button=""
+            ng-reflect-router-link="ca"
+            ng-reflect-router-link-active="active"
+            routerlinkactive="active"
+          >
+            Kalendar
+          </a>
+          <a
+            mat-button=""
             ng-reflect-router-link="us"
             ng-reflect-router-link-active="active"
             routerlinkactive="active"

@@ -8,7 +8,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {RouterModule} from '@angular/router';
 import {DiIsAdmin} from 'src/app/data';
 import {DiUser} from 'src/app/data/active';
-import {RouteUsers} from 'src/routing';
+import {RouteCalendar, RouteUsers} from 'src/routing';
 
 @Component({
   selector: 'app-main',
@@ -41,6 +41,7 @@ export class MainComponent {
   protected readonly isAdmin$ = inject(DiIsAdmin);
   protected readonly user$ = inject(DiUser);
 
+  protected readonly RouteCalendar = RouteCalendar;
   protected readonly RouteUsers = RouteUsers;
 
   protected async logout() {
