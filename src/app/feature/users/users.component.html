@@ -1,44 +1,31 @@
-<pre>{{ users$ | async | json }}</pre>
-
-<!-- @let request = request$ | async;
-@let error = request?.error;
-@let body = request?.body;
-@let items = body?.data ?? [];
+@let items = (users$ | async) ?? [];
 @let selectedName = selectedName$ | async;
 
 <div
-  class="list um-list-v um-padding-default um-gap-default"
+  class="list sd-list-v sd-padding-default sd-gap-default"
   (mouseenter)="pointerInList = true"
   (mouseleave)="pointerInList = false"
   [class.show-name-only]="!!selectedName && !pointerInList"
 >
   @if (!selectedName || pointerInList) {
-    <h5 [style.text-align]="'center'">Kommune</h5>
+    <h5 class="sd-text-ellipsis" [style.text-align]="'center'">Benutzer</h5>
 
-    @if (error) {
-      <div class="um-flex-spacer">
-        <app-message flavor="error">
-          <span>{{ error | errorString }}</span>
-        </app-message>
-      </div>
-    } @else {
-      <cdk-virtual-scroll-viewport itemSize="50" class="um-flex-spacer">
-        <div
-          *cdkVirtualFor="let item of items; trackBy: trackBy"
-          class="list-item um-list-item um-border-radius"
-          [routerLink]="item.id + ''"
-          routerLinkActive="active"
-        >
-          <div class="um-list-item-content um-bar-h um-padding-narrow">
-            <span class="um-text-ellipsis">
-              {{ item.name }}
-            </span>
-          </div>
+    <cdk-virtual-scroll-viewport itemSize="50" class="sd-flex-spacer">
+      <div
+        *cdkVirtualFor="let item of items; trackBy: trackBy"
+        class="list-item sd-list-item sd-border-radius"
+        [routerLink]="item.id"
+        routerLinkActive="active"
+      >
+        <div class="sd-list-item-content sd-bar-h sd-padding-narrow">
+          <span class="sd-text-ellipsis">
+            {{ item.name }}
+          </span>
         </div>
-      </cdk-virtual-scroll-viewport>
-    }
-    <div class="um-bar-h um-flex-end um-padding-default um-font-size-medium">
-      <span>{{ items.length }}/{{ body?.count ?? 0 }}</span>
+      </div>
+    </cdk-virtual-scroll-viewport>
+    <div class="sd-bar-h sd-flex-end sd-padding-default sd-font-size-medium">
+      <span>{{ items.length }}</span>
     </div>
   } @else {
     <div class="selected-name">
@@ -47,8 +34,8 @@
   }
 </div>
 
-<div class="um-space-container">
-  <div class="um-space-container-content">
+<div class="sd-space-container">
+  <div class="sd-space-container-content">
     <router-outlet />
   </div>
-</div> -->
+</div>

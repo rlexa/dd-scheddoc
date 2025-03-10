@@ -1,6 +1,7 @@
 import {inject, InjectionToken} from '@angular/core';
 import {doc, docData, Firestore} from '@angular/fire/firestore';
-import {catchError, filter, map, Observable, of, switchMap} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, Observable, of, switchMap} from 'rxjs';
+import {fanOut, jsonEqual} from 'src/util';
 import {DiUser} from './active';
 import {DbUser} from './db';
 
@@ -23,6 +24,8 @@ export const DiDbUser = new InjectionToken<Observable<DbUser | null>>('Current D
               }),
             ),
       ),
+      distinctUntilChanged(jsonEqual),
+      fanOut(),
     );
   },
 });

@@ -1,5 +1,6 @@
 import {inject, InjectionToken} from '@angular/core';
-import {map, Observable} from 'rxjs';
+import {distinctUntilChanged, map, Observable} from 'rxjs';
+import {fanOut} from 'src/util';
 import {DbUserGroup} from './db';
 import {DiDbUser} from './db-user.di';
 
@@ -11,6 +12,8 @@ export const DiIsAdmin = new InjectionToken<Observable<boolean>>('Is-admin user 
     return dbUser$.pipe(
       map((user) => user?.group ?? DbUserGroup.User),
       map((group) => group === DbUserGroup.Admin),
+      distinctUntilChanged(),
+      fanOut(),
     );
   },
 });

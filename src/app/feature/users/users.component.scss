@@ -24,6 +24,7 @@
 
     &:not(.show-name-only) {
       min-width: 15rem;
+      max-width: 15rem;
     }
   }
 }

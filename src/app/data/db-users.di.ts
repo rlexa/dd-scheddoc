@@ -1,6 +1,7 @@
 import {inject, InjectionToken} from '@angular/core';
 import {collection, collectionData, Firestore, orderBy, query} from '@angular/fire/firestore';
-import {catchError, map, Observable, of, startWith, Subject, switchMap} from 'rxjs';
+import {catchError, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap} from 'rxjs';
+import {fanOut, jsonEqual} from 'src/util';
 import {DbUser} from './db';
 
 export const DiDbUsersTrigger = new InjectionToken<Subject<void>>('DB users trigger.', {
@@ -27,6 +28,8 @@ export const DiDbUsers = new InjectionToken<Observable<DbUser[]>>('DB users.', {
           }),
         ),
       ),
+      distinctUntilChanged(jsonEqual),
+      fanOut(),
     );
   },
 });
