@@ -54,6 +54,8 @@ export class UserComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.id$.next(null);
+    this.reset$.complete();
+    this.save$.complete();
   }
 
   ngOnInit() {
