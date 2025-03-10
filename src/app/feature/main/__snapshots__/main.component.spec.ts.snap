@@ -5,7 +5,16 @@ exports[`MainComponent renders 1`] = `
   <app-main>
     <mat-toolbar>
       <mat-toolbar-row>
-        <nav />
+        <nav>
+          <a
+            mat-button=""
+            ng-reflect-router-link="us"
+            ng-reflect-router-link-active="active"
+            routerlinkactive="active"
+          >
+            Benutzer
+          </a>
+        </nav>
         <span
           class="sd-flex-spacer"
         />
@@ -42,12 +51,12 @@ exports[`MainComponent renders 1`] = `
           </button>
         </mat-menu>
         <button
-          class="avatar-image"
-          mat-card-avatar=""
           mat-icon-button=""
           ng-reflect-menu="[object Object]"
-          style="background-image: url(photoURL);"
         >
+          <mat-icon>
+            person
+          </mat-icon>
         </button>
       </mat-toolbar-row>
     </mat-toolbar>

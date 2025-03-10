@@ -1,6 +1,5 @@
 @let user = user$ | async;
 @let isAdmin = isAdmin$ | async;
-@let userAvatar = !user?.photoURL ? '"favicon.ico"' : '"' + user!.photoURL + '"';
 
 <mat-toolbar>
   <mat-toolbar-row>
@@ -24,17 +23,7 @@
         </button>
       </mat-menu>
 
-      <button
-        mat-icon-button
-        mat-card-avatar
-        class="avatar-image"
-        [style.background-image]="'url(' + userAvatar + ')'"
-        [matMenuTriggerFor]="menu"
-      >
-        @if (!user.photoURL) {
-          <mat-icon>person</mat-icon>
-        }
-      </button>
+      <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
     }
   </mat-toolbar-row>
 </mat-toolbar>

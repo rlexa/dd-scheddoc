@@ -30,15 +30,6 @@ import {SignInDirective} from './sign-in';
               background: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
             }
           }
-
-          .avatar-image {
-            background-size: cover;
-            height: 2.5rem;
-            width: 2.5rem;
-            border-radius: 50%;
-            object-fit: cover;
-            z-index: 1;
-          }
         }
       }
     `,
