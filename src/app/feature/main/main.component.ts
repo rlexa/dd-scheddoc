@@ -6,7 +6,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {RouterModule} from '@angular/router';
-import {DiDbUser} from 'src/app/data';
 import {DiUser} from 'src/app/data/active';
 import {SignInDirective} from './sign-in';
 
@@ -50,7 +49,6 @@ import {SignInDirective} from './sign-in';
 export class MainComponent {
   private readonly auth = inject(Auth);
   protected readonly user$ = inject(DiUser);
-  protected readonly dbUser$ = inject(DiDbUser);
 
   protected async logout() {
     try {
