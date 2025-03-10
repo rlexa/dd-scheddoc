@@ -32,10 +32,11 @@ import {SignInDirective} from './sign-in';
 
           .avatar-image {
             background-size: cover;
-            height: 40px;
-            width: 40px;
+            height: 2.5rem;
+            width: 2.5rem;
             border-radius: 50%;
             object-fit: cover;
+            z-index: 1;
           }
         }
       }
