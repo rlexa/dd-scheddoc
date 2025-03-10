@@ -2,7 +2,7 @@ import {inject, InjectionToken} from '@angular/core';
 import {collection, collectionData, Firestore, orderBy, query} from '@angular/fire/firestore';
 import {catchError, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap} from 'rxjs';
 import {fanOut, jsonEqual} from 'src/util';
-import {DbUser} from './db';
+import {collectionUser, DbUser} from './db';
 
 export const DiDbUsersTrigger = new InjectionToken<Subject<void>>('DB users trigger.', {
   providedIn: 'root',
@@ -15,7 +15,7 @@ export const DiDbUsers = new InjectionToken<Observable<DbUser[]>>('DB users.', {
     const api = inject(Firestore);
     const trigger$ = inject(DiDbUsersTrigger);
 
-    const ref = collection(api, 'user');
+    const ref = collection(api, collectionUser);
 
     return trigger$.pipe(
       startWith('meh'),

@@ -1,26 +1,37 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, DestroyRef, inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {doc, Firestore, updateDoc} from '@angular/fire/firestore';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
-import {combineLatest, distinctUntilChanged, map} from 'rxjs';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {combineLatest, distinctUntilChanged, filter, map, of, startWith, Subject, switchMap} from 'rxjs';
 import {DiDbUser, DiSelectedUser} from 'src/app/data';
 import {DiSelectedUserId} from 'src/app/data/active';
-import {DbUserGroup, DbUserQualification, qualificationsGerman} from 'src/app/data/db';
+import {collectionUser, DbUserGroup, DbUserQualification, qualificationsGerman} from 'src/app/data/db';
 import {RouteParamUserId} from 'src/routing';
+import {notNullUndefined} from 'src/util';
+import {msSecond} from 'src/util-date';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatSelectModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatSnackBarModule, ReactiveFormsModule],
 })
 export class UserComponent implements OnDestroy, OnInit {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly firestore = inject(Firestore);
   private readonly id$ = inject(DiSelectedUserId);
-  protected readonly user$ = inject(DiSelectedUser);
+  private readonly matSnackBar = inject(MatSnackBar);
   protected readonly self$ = inject(DiDbUser);
+  protected readonly user$ = inject(DiSelectedUser);
+
+  private readonly reset$ = new Subject<void>();
+  private readonly save$ = new Subject<void>();
 
   @Input({alias: RouteParamUserId}) set id(val: string | null | undefined) {
     this.id$.next(val ?? null);
@@ -55,7 +66,43 @@ export class UserComponent implements OnDestroy, OnInit {
       .subscribe((isSelf) => (isSelf ? this.formGroup.controls.group.disable() : this.formGroup.controls.group.enable()));
 
     this.user$
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        switchMap((user) =>
+          this.reset$.pipe(
+            startWith('meh'),
+            map(() => user),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe((user) => this.formGroup.setValue({group: user?.group ?? null, qualification: user?.qualification ?? null}));
+
+    combineLatest([this.id$.pipe(filter(notNullUndefined)), this.formGroup.valueChanges])
+      .pipe(
+        switchMap(([id, value]) =>
+          this.save$.pipe(
+            switchMap(async () => {
+              const ref = doc(this.firestore, collectionUser, id);
+              try {
+                await updateDoc(ref, value);
+                return of(true);
+              } catch (err) {
+                console.log('Failed to update user', id, err);
+                this.matSnackBar.open('Benutzer nicht gespeichert!', 'OK', {politeness: 'assertive'});
+              }
+              return of(false);
+            }),
+          ),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((ok) => {
+        if (ok) {
+          this.matSnackBar.open('Benutzer gespeichert', 'OK', {duration: 2 * msSecond});
+        }
+      });
   }
+
+  protected readonly reset = () => this.reset$.next();
+  protected readonly save = () => this.save$.next();
 }

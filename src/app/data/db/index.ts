@@ -18,6 +18,8 @@ export interface DbUser {
   qualification?: DbUserQualification | null;
 }
 
+export const collectionUser = 'user';
+
 export const qualificationsGerman: Record<DbUserQualification, string> = {
   [DbUserQualification.EmergencyRoom]: 'Notaufnahme',
   [DbUserQualification.IntensiveCareUnit]: 'Intensivstation',
