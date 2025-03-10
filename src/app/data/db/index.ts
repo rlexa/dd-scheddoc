@@ -11,6 +11,13 @@ export enum DbUserQualification {
   ThirdService = 'ThirdService',
 }
 
+export enum DbUserAvailability {
+  Must = 'Must',
+  No = 'No',
+  None = 'None',
+  Yes = 'Yes',
+}
+
 export interface DbUser {
   group?: DbUserGroup | null;
   id?: string | null;
@@ -26,4 +33,11 @@ export const qualificationsGerman: Record<DbUserQualification, string> = {
   [DbUserQualification.SeniorPhysician]: 'Oberarzt',
   [DbUserQualification.Test]: 'Test',
   [DbUserQualification.ThirdService]: '3. Dienst',
+};
+
+export const userAvailabilitiesGerman: Record<DbUserAvailability, string> = {
+  [DbUserAvailability.Must]: 'Muss',
+  [DbUserAvailability.No]: 'Nein',
+  [DbUserAvailability.None]: 'Egal',
+  [DbUserAvailability.Yes]: 'Kann',
 };

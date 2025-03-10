@@ -1,12 +1,32 @@
 table {
+  margin: auto;
+
   tr {
     th,
     td {
       padding: 0.5rem 0.5rem;
+      height: 1.5rem;
+      vertical-align: bottom;
+      width: 5rem;
+
+      mat-icon {
+        vertical-align: bottom;
+      }
     }
 
-    &.weekend {
-      background-color: var(--sd-color-bg-weekend);
+    td {
+      &.day {
+        font-family: monospace;
+      }
+
+      &.icon-only {
+        text-align: center;
+      }
+
+      &.holiday,
+      &.weekend {
+        background-color: var(--sd-color-bg-weekend);
+      }
     }
   }
 }

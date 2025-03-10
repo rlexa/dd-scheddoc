@@ -1,5 +1,9 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, computed, Input, signal} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
+import {ToHolidayPipe} from 'src/app/shared/to-holiday';
 import {strPadStartWithZero2, strPadStartWithZero4} from 'src/util';
 import {IsWeekendPipe} from './is-weekend.pipe';
 
@@ -8,7 +12,7 @@ import {IsWeekendPipe} from './is-weekend.pipe';
   templateUrl: './month.component.html',
   styleUrls: ['./month.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, IsWeekendPipe],
+  imports: [CommonModule, IsWeekendPipe, MatIconModule, MatTooltipModule, ToHolidayPipe],
 })
 export class MonthComponent {
   private readonly dateOfMonth = signal<string | null>(null);
@@ -16,6 +20,15 @@ export class MonthComponent {
   @Input() set dateMonth(val: string | null | undefined) {
     this.dateOfMonth.set(val ?? null);
   }
+
+  protected readonly DbUserAvailability = DbUserAvailability;
+  protected readonly availabilities: DbUserAvailability[] = [
+    DbUserAvailability.None,
+    DbUserAvailability.No,
+    DbUserAvailability.Yes,
+    DbUserAvailability.Must,
+  ];
+  protected readonly userAvailabilitiesGerman = userAvailabilitiesGerman;
 
   protected readonly days = computed(() => {
     const date = this.dateOfMonth();

@@ -1,10 +1,27 @@
-<table width="100%">
+<table>
   <tr>
-    <th>Tag</th>
+    <th class="day">Tag</th>
+    @for (avail of availabilities; track avail) {
+      <th>{{ userAvailabilitiesGerman[avail] }}</th>
+    }
   </tr>
   @for (day of days(); track $index) {
-    <tr [class.weekend]="day | isWeekend">
-      <td>{{ day | date: 'dd ccc' }}</td>
+    @let holiday = day | toHoliday;
+
+    <tr>
+      <td class="day" [class.weekend]="day | isWeekend" [class.holiday]="!!holiday">
+        <span>{{ day | date: 'dd ccc' }}</span>
+        @if (holiday) {
+          <mat-icon class="sd-margin-left-default" [matTooltip]="holiday">liquor</mat-icon>
+        }
+      </td>
+      @for (avail of availabilities; track avail) {
+        <td class="icon-only">
+          @if (avail === DbUserAvailability.None) {
+            <mat-icon>check</mat-icon>
+          }
+        </td>
+      }
     </tr>
   }
 </table>
