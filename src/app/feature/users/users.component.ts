@@ -1,7 +1,8 @@
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {RouterModule} from '@angular/router';
+import {DiDbUsers} from 'src/app/data';
 
 @Component({
   selector: 'app-users',
@@ -10,4 +11,6 @@ import {RouterModule} from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule, ScrollingModule],
 })
-export class UsersComponent {}
+export class UsersComponent {
+  protected readonly users$ = inject(DiDbUsers);
+}
