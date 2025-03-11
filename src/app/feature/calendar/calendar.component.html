@@ -8,6 +8,6 @@
       }
     </mat-button-toggle-group>
 
-    <app-month [dateMonth]="selectedDate" />
+    <app-month [dateMonth]="selectedDate" [calendar]="dbCalendar$ | async" />
   </div>
 }

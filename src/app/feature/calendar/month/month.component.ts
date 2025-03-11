@@ -2,9 +2,9 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, computed, Input, signal} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
+import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
-import {strPadStartWithZero2, strPadStartWithZero4} from 'src/util';
+import {jsonEqual, strPadStartWithZero2, strPadStartWithZero4} from 'src/util';
 import {IsWeekendPipe} from './is-weekend.pipe';
 
 @Component({
@@ -15,10 +15,15 @@ import {IsWeekendPipe} from './is-weekend.pipe';
   imports: [CommonModule, IsWeekendPipe, MatIconModule, MatTooltipModule, ToHolidayPipe],
 })
 export class MonthComponent {
+  protected readonly calendarEntries = signal<DbCalendar[]>([], {equal: jsonEqual});
   private readonly dateOfMonth = signal<string | null>(null);
 
   @Input() set dateMonth(val: string | null | undefined) {
     this.dateOfMonth.set(val ?? null);
+  }
+
+  @Input() set calendar(val: DbCalendar[] | null | undefined) {
+    this.calendarEntries.set(val ?? []);
   }
 
   protected readonly DbUserAvailability = DbUserAvailability;

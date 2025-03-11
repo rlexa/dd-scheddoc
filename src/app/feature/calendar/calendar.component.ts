@@ -3,7 +3,7 @@ import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@an
 import {FormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {distinctUntilChanged, map} from 'rxjs';
-import {DiDbUser} from 'src/app/data';
+import {DiDbCalendar, DiDbUser} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {fanOut, strPadStartWithZero2, strPadStartWithZero4} from 'src/util';
 import {MonthComponent} from './month';
@@ -16,6 +16,7 @@ import {MonthComponent} from './month';
   imports: [CommonModule, FormsModule, MatButtonToggleModule, MonthComponent],
 })
 export class CalendarComponent implements OnInit, OnDestroy {
+  protected readonly dbCalendar$ = inject(DiDbCalendar);
   private readonly dbUser$ = inject(DiDbUser);
   protected readonly selectedDate$ = inject(DiSelectedDate);
 

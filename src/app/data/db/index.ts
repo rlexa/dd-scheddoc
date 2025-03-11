@@ -25,6 +25,19 @@ export interface DbUser {
   qualification?: DbUserQualification | null;
 }
 
+export type DbUserKey = keyof DbUser;
+
+export interface DbCalendar {
+  availability?: DbUserAvailability | null;
+  day?: string | null;
+  frozen?: boolean | null;
+  id?: string | null;
+  user?: string | null;
+}
+
+export type DbCalendarKey = keyof DbCalendar;
+
+export const collectionCalendar = 'calendar';
 export const collectionUser = 'user';
 
 export const qualificationsGerman: Record<DbUserQualification, string> = {

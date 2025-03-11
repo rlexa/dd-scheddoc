@@ -3,7 +3,9 @@ import {doc, docData, Firestore} from '@angular/fire/firestore';
 import {catchError, distinctUntilChanged, filter, map, Observable, of, switchMap} from 'rxjs';
 import {fanOut, jsonEqual} from 'src/util';
 import {DiUser} from './active';
-import {collectionUser, DbUser} from './db';
+import {collectionUser, DbUser, DbUserKey} from './db';
+
+const idField: DbUserKey = 'id';
 
 export const DiDbUser = new InjectionToken<Observable<DbUser | null>>('Current DB user.', {
   providedIn: 'root',
@@ -16,7 +18,7 @@ export const DiDbUser = new InjectionToken<Observable<DbUser | null>>('Current D
       switchMap((user) =>
         !user
           ? of<DbUser | null>(null)
-          : docData(doc(api, collectionUser, user.uid), {idField: 'id'}).pipe(
+          : docData(doc(api, collectionUser, user.uid), {idField}).pipe(
               map((ii) => ii as DbUser),
               catchError((err) => {
                 console.error('Failed to fetch DB user.', err);
