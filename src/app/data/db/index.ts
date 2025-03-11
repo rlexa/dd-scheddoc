@@ -12,10 +12,12 @@ export enum DbUserQualification {
 }
 
 export enum DbUserAvailability {
+  Can = 'Can',
+  Cant = 'Cant',
   Must = 'Must',
-  No = 'No',
   None = 'None',
-  Yes = 'Yes',
+  Want = 'Want',
+  Wont = 'Wont',
 }
 
 export interface DbUser {
@@ -49,8 +51,10 @@ export const qualificationsGerman: Record<DbUserQualification, string> = {
 };
 
 export const userAvailabilitiesGerman: Record<DbUserAvailability, string> = {
+  [DbUserAvailability.Can]: 'Kann',
+  [DbUserAvailability.Cant]: 'Nein',
   [DbUserAvailability.Must]: 'Muss',
-  [DbUserAvailability.No]: 'Nein',
   [DbUserAvailability.None]: 'Egal',
-  [DbUserAvailability.Yes]: 'Kann',
+  [DbUserAvailability.Want]: 'Will',
+  [DbUserAvailability.Wont]: 'Will nicht',
 };

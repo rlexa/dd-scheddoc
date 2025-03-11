@@ -1,3 +1,5 @@
+@let entries = dbEntries();
+
 <table>
   <tr>
     <th class="day">Tag</th>
@@ -17,13 +19,19 @@
       </td>
       @for (avail of availabilities; track avail) {
         <td class="icon-only">
-          @if (avail === DbUserAvailability.None) {
-            <mat-icon>check</mat-icon>
+          @if (entries[day]; as entry) {
+            @if (entry.availability === avail) {
+              @if (entry.frozen) {
+                <mat-icon>done_all</mat-icon>
+              } @else {
+                <mat-icon>check</mat-icon>
+              }
+            }
+          } @else if (avail === DbUserAvailability.None) {
+            <mat-icon>question_mark</mat-icon>
           }
         </td>
       }
     </tr>
   }
 </table>
-
-<pre>{{ calendarEntries() | json }}</pre>
