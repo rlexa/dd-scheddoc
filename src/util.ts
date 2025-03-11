@@ -1,5 +1,6 @@
 import {MonoTypeOperatorFunction, shareReplay} from 'rxjs';
 
+export const jsonCopy = <T>(from: T): T => JSON.parse(JSON.stringify(from));
 export const jsonEqual = <T>(left: T, right: T): boolean => left === right || JSON.stringify(left) === JSON.stringify(right);
 
 export const notNullUndefined = <T>(val: T | null | undefined): val is T => val !== null && val !== undefined;

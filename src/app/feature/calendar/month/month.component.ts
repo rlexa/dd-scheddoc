@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, Input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
@@ -25,6 +25,8 @@ export class MonthComponent {
   @Input() set calendar(val: DbCalendar[] | null | undefined) {
     this.calendarEntries.set(val ?? []);
   }
+
+  @Output() readonly changeAvailability = new EventEmitter<{date: string; value: DbUserAvailability | null}>();
 
   protected readonly DbUserAvailability = DbUserAvailability;
   protected readonly availabilities: DbUserAvailability[] = [
@@ -57,7 +59,10 @@ export class MonthComponent {
   );
 
   protected readonly dbEntries = computed(
-    () => this.calendarEntries().reduce<Record<string, DbCalendar>>((acc, ii) => ({...acc, [`${ii.day}T00:00:00.000`]: ii}), {}),
+    () =>
+      this.calendarEntries().reduce<Record<string, DbCalendar | undefined>>((acc, ii) => ({...acc, [`${ii.day}T00:00:00.000`]: ii}), {}),
     {equal: jsonEqual},
   );
+
+  protected readonly setAvailability = (date: string, value: DbUserAvailability | null) => this.changeAvailability.emit({date, value});
 }

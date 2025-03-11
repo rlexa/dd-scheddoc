@@ -12,6 +12,14 @@ table {
       mat-icon {
         vertical-align: bottom;
       }
+
+      &.clickable {
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--sd-color-hover);
+        }
+      }
     }
 
     td {

@@ -2,12 +2,21 @@
   @let selectedDate = selectedDate$ | async;
 
   <div class="sd-padding-wide sd-list-v sd-gap-wide">
-    <mat-button-toggle-group [style.align-self]="'center'" name="Monat" [ngModel]="selectedDate" (ngModelChange)="setSelectedDate($event)">
-      @for (dat of dates; track $index) {
-        <mat-button-toggle [value]="dat">{{ dat | date: 'MMMM' }}</mat-button-toggle>
-      }
-    </mat-button-toggle-group>
+    <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
+      <mat-button-toggle-group name="Monat" [ngModel]="selectedDate" (ngModelChange)="setSelectedDate($event)">
+        @for (dat of dates; track $index) {
+          <mat-button-toggle [value]="dat">{{ dat | date: 'MMMM' }}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
 
-    <app-month [dateMonth]="selectedDate" [calendar]="dbCalendar$ | async" />
+      <button mat-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
+      <button mat-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+    </div>
+
+    <app-month
+      [dateMonth]="selectedDate"
+      [calendar]="formValue$ | async"
+      (changeAvailability)="setAvailability(id, $event.date, $event.value)"
+    />
   </div>
 }

@@ -18,8 +18,14 @@
         }
       </td>
       @for (avail of availabilities; track avail) {
-        <td class="icon-only">
-          @if (entries[day]; as entry) {
+        @let entry = entries[day];
+
+        <td
+          class="icon-only"
+          [class.clickable]="!entry?.frozen"
+          (click)="setAvailability(day, avail === entry?.availability ? null : avail)"
+        >
+          @if (entry) {
             @if (entry.availability === avail) {
               @if (entry.frozen) {
                 <mat-icon>done_all</mat-icon>
