@@ -7,7 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {combineLatest, distinctUntilChanged, filter, map, of, startWith, Subject, switchMap} from 'rxjs';
+import {combineLatest, distinctUntilChanged, filter, map, startWith, Subject, switchMap} from 'rxjs';
 import {DiDbUser, DiSelectedUser} from 'src/app/data';
 import {DiSelectedUserId} from 'src/app/data/active';
 import {collectionUser, DbUserGroup, DbUserQualification, qualificationsGerman} from 'src/app/data/db';
@@ -87,12 +87,12 @@ export class UserComponent implements OnDestroy, OnInit {
               const ref = doc(this.firestore, collectionUser, id);
               try {
                 await updateDoc(ref, value);
-                return of(true);
+                return true;
               } catch (err) {
                 console.log('Failed to update user', id, err);
                 this.matSnackBar.open('Benutzer nicht gespeichert!', 'OK', {politeness: 'assertive'});
               }
-              return of(false);
+              return false;
             }),
           ),
         ),
