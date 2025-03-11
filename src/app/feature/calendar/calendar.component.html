@@ -1,6 +1,8 @@
 @if (id$ | async; as id) {
+  @let selectedDate = selectedDate$ | async;
+
   <div class="sd-padding-wide sd-list-v sd-gap-wide">
-    <mat-button-toggle-group [style.align-self]="'center'" name="Monat" [(ngModel)]="selectedDate">
+    <mat-button-toggle-group [style.align-self]="'center'" name="Monat" [ngModel]="selectedDate" (ngModelChange)="setSelectedDate($event)">
       @for (dat of dates; track $index) {
         <mat-button-toggle [value]="dat">{{ dat | date: 'MMMM' }}</mat-button-toggle>
       }
