@@ -20,11 +20,16 @@ table {
           background-color: var(--sd-color-hover);
         }
       }
+
+      &:not(:last-child) {
+        border-right: 1px solid var(--mat-sys-neutral10);
+      }
     }
 
     td {
       &.day {
         font-family: monospace;
+        min-width: 4.5rem;
       }
 
       &.icon-only {
@@ -35,6 +40,20 @@ table {
       &.weekend {
         background-color: var(--sd-color-bg-weekend);
       }
+    }
+
+    &.sticky {
+      position: sticky;
+      top: 0;
+      background: var(--mat-sys-surface);
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  table tr {
+    th {
+      writing-mode: vertical-lr;
     }
   }
 }

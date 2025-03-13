@@ -1,7 +1,7 @@
 @let entries = dbEntries();
 
-<table>
-  <tr>
+<table cellSpacing="0">
+  <tr class="sticky">
     <th class="day">Tag</th>
     @for (avail of availabilities; track avail) {
       <th>{{ userAvailabilitiesGerman[avail] }}</th>
