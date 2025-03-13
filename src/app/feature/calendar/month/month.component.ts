@@ -3,9 +3,9 @@ import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Outpu
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
+import {IsWeekendPipe} from 'src/app/shared/is-weekend';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
 import {jsonEqual} from 'src/util';
-import {IsWeekendPipe} from './is-weekend.pipe';
 
 @Component({
   selector: 'app-month',
