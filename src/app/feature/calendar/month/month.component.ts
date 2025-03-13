@@ -2,7 +2,7 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman} from 'src/app/data/db';
+import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman, userAvailabilitiesOrdered} from 'src/app/data/db';
 import {IsWeekendPipe} from 'src/app/shared/is-weekend';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
 import {jsonEqual} from 'src/util';
@@ -27,14 +27,7 @@ export class MonthComponent {
   @Output() readonly changeAvailability = new EventEmitter<{date: string; value: DbUserAvailability | null}>();
 
   protected readonly DbUserAvailability = DbUserAvailability;
-  protected readonly availabilities: DbUserAvailability[] = [
-    DbUserAvailability.Must,
-    DbUserAvailability.Want,
-    DbUserAvailability.Can,
-    DbUserAvailability.Wont,
-    DbUserAvailability.Cant,
-    DbUserAvailability.None,
-  ];
+  protected readonly availabilities = userAvailabilitiesOrdered;
   protected readonly userAvailabilitiesGerman = userAvailabilitiesGerman;
 
   protected readonly dbEntries = computed(

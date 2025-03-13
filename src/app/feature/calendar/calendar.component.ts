@@ -10,9 +10,9 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {combineLatest, debounceTime, distinctUntilChanged, map, of, Subject, switchMap} from 'rxjs';
 import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
-import {collectionCalendar, DbUserAvailability} from 'src/app/data/db';
+import {collectionCalendar, DbCalendar, DbUserAvailability, userAvailabilitiesGerman, userAvailabilitiesOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
-import {fanOut} from 'src/util';
+import {downloadBlob, fanOut} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {CalendarFormService} from './calendar-form.service';
 import {MonthComponent} from './month';
@@ -133,4 +133,28 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.formService.setAvailability(user, date, value);
 
   protected readonly setSelectedDate = (val: string) => this.selectedDate$.next(val);
+
+  protected download(days: string[], entries: DbCalendar[]) {
+    const csv = [
+      `Tag;${userAvailabilitiesOrdered.map((ii) => userAvailabilitiesGerman[ii]).join(';')}`,
+      ...days
+        .map((day) => day.substring(0, 'yyyy-mm-dd'.length))
+        .map((day) =>
+          [
+            day,
+            ...userAvailabilitiesOrdered.map((avail) => {
+              const entry = entries.find((ee) => ee.day === day);
+              if (!entry && avail === DbUserAvailability.None) {
+                return 'x';
+              } else if (entry?.availability === avail) {
+                return 'x';
+              }
+              return '';
+            }),
+          ].join(';'),
+        ),
+    ].join('\n');
+
+    downloadBlob(new Blob([csv], {type: 'text/csv'}), 'monat.csv');
+  }
 }

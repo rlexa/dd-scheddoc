@@ -39,6 +39,8 @@ export interface DbCalendar {
 
 export type DbCalendarKey = keyof DbCalendar;
 
+// #region constants
+
 export const collectionCalendar = 'calendar';
 export const collectionUser = 'user';
 
@@ -49,6 +51,15 @@ export const qualificationsGerman: Record<DbUserQualification, string> = {
   [DbUserQualification.Test]: 'Test',
   [DbUserQualification.ThirdService]: '3. Dienst',
 };
+
+export const userAvailabilitiesOrdered: DbUserAvailability[] = [
+  DbUserAvailability.Must,
+  DbUserAvailability.Want,
+  DbUserAvailability.Can,
+  DbUserAvailability.Wont,
+  DbUserAvailability.Cant,
+  DbUserAvailability.None,
+];
 
 export const userAvailabilitiesGerman: Record<DbUserAvailability, string> = {
   [DbUserAvailability.Can]: 'Kann',

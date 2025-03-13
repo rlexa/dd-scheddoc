@@ -1,5 +1,7 @@
 @if (id$ | async; as id) {
   @let selectedDate = selectedDate$ | async;
+  @let days = selectedDate | toMonthDays;
+  @let formValue = formValue$ | async;
 
   <div class="sd-padding-wide sd-list-v sd-gap-wide">
     <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
@@ -11,12 +13,13 @@
 
       <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
       <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+      <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!)"><mat-icon>download</mat-icon></button>
     </div>
 
     <app-month
       [dateMonth]="selectedDate"
-      [days]="selectedDate | toMonthDays"
-      [calendar]="formValue$ | async"
+      [days]="days"
+      [calendar]="formValue"
       (changeAvailability)="setAvailability(id, $event.date, $event.value)"
     />
   </div>
