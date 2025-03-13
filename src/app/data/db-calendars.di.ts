@@ -5,9 +5,8 @@ import {fanOut, jsonEqual} from 'src/util';
 import {dateToEndOfMonthDatePart, dateToStartOfMonthDatePart} from 'src/util-date';
 import {DiSelectedDate} from './active';
 import {collectionCalendar, DbCalendar, DbCalendarKey} from './db';
-import {DiDbUser} from './db-user.di';
 
-export const DiDbCalendarTrigger = new InjectionToken<Subject<void>>('DB calendar trigger.', {
+export const DiDbCalendarsTrigger = new InjectionToken<Subject<void>>('DB calendars trigger.', {
   providedIn: 'root',
   factory: () => new Subject<void>(),
 });
@@ -15,30 +14,27 @@ export const DiDbCalendarTrigger = new InjectionToken<Subject<void>>('DB calenda
 const idField: DbCalendarKey = 'id';
 const keyOrderBy: DbCalendarKey = 'day';
 const keyDay: DbCalendarKey = 'day';
-const keyUser: DbCalendarKey = 'user';
 
-/** Day-to-entry calendar for current user. */
-export const DiDbCalendar = new InjectionToken<Observable<DbCalendar[]>>('DB calendar.', {
+/** Day-to-entry calendar for all users. */
+export const DiDbCalendars = new InjectionToken<Observable<DbCalendar[]>>('DB calendars.', {
   providedIn: 'root',
   factory: () => {
     const api = inject(Firestore);
-    const dbUser$ = inject(DiDbUser);
     const selectedDate$ = inject(DiSelectedDate);
-    const trigger$ = inject(DiDbCalendarTrigger);
+    const trigger$ = inject(DiDbCalendarsTrigger);
 
     const ref = collection(api, collectionCalendar);
 
-    return combineLatest([dbUser$, selectedDate$]).pipe(
-      switchMap(([dbUser, selectedDate]) =>
+    return combineLatest([selectedDate$]).pipe(
+      switchMap(([selectedDate]) =>
         trigger$.pipe(
           startWith('meh'),
           switchMap(() =>
-            !dbUser?.id || !selectedDate || selectedDate.length < 'yyyy-mm-dd'.length
+            !selectedDate || selectedDate.length < 'yyyy-mm-dd'.length
               ? of<DbCalendar[]>([])
               : collectionData(
                   query(
                     ref,
-                    where(keyUser, '==', dbUser.id),
                     where(keyDay, '>=', dateToStartOfMonthDatePart(selectedDate)),
                     where(keyDay, '<=', dateToEndOfMonthDatePart(selectedDate)),
                     orderBy(keyOrderBy),
@@ -47,7 +43,7 @@ export const DiDbCalendar = new InjectionToken<Observable<DbCalendar[]>>('DB cal
                 ).pipe(
                   map((ii) => (ii ?? []) as DbCalendar[]),
                   catchError((err) => {
-                    console.error('Failed to fetch DB calendar.', err);
+                    console.error('Failed to fetch DB calendars.', err);
                     return of<DbCalendar[]>([]);
                   }),
                 ),

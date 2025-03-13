@@ -38,10 +38,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
   private readonly dbCalendar$ = inject(DiDbCalendar);
   private readonly dbCalendarTrigger$ = inject(DiDbCalendarTrigger);
   private readonly dbUser$ = inject(DiDbUser);
-  protected readonly destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly firestore = inject(Firestore);
   private readonly formService = inject(CalendarFormService);
-  protected readonly matSnackBar = inject(MatSnackBar);
+  private readonly matSnackBar = inject(MatSnackBar);
   protected readonly selectedDate$ = inject(DiSelectedDate);
 
   private readonly saveTrigger$ = new Subject<void>();

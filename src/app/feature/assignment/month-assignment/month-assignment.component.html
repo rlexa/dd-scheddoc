@@ -1,3 +1,5 @@
+@let users = userMap();
+
 <table cellSpacing="0">
   <tr class="sticky">
     <th class="day">Tag</th>
@@ -7,6 +9,7 @@
   </tr>
   @for (day of days; track $index) {
     @let holiday = day | toHoliday;
+    @let entries = dayEntryMap()[day];
 
     <tr>
       <td class="day" [class.weekend]="day | isWeekend" [class.holiday]="!!holiday">
