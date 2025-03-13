@@ -9,8 +9,8 @@
         }
       </mat-button-toggle-group>
 
-      <button mat-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
-      <button mat-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+      <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
+      <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
     </div>
 
     <app-month
