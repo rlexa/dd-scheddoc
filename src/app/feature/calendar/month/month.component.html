@@ -23,7 +23,7 @@
         <td
           class="icon-only"
           [class.clickable]="!entry?.frozen"
-          (click)="setAvailability(day, avail === entry?.availability ? null : avail)"
+          (click)="!entry?.frozen ? setAvailability(day, avail === entry?.availability ? null : avail) : 0"
         >
           @if (entry) {
             @if (entry.availability === avail) {

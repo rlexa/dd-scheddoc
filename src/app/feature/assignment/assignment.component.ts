@@ -6,14 +6,25 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {DiSelectedDate} from 'src/app/data/active';
+import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {generateCurrentMonths} from 'src/util-date';
+import {MonthAssignmentComponent} from './month-assignment';
 
 @Component({
   selector: 'app-assignment',
   templateUrl: './assignment.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, MatButtonModule, MatButtonToggleModule, MatIconModule, MatSnackBarModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MonthAssignmentComponent,
+    ToMonthDaysPipe,
+  ],
 })
 export class AssignmentComponent implements OnInit, OnDestroy {
   protected readonly destroyRef = inject(DestroyRef);

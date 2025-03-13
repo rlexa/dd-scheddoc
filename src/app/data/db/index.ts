@@ -44,6 +44,13 @@ export type DbCalendarKey = keyof DbCalendar;
 export const collectionCalendar = 'calendar';
 export const collectionUser = 'user';
 
+export const qualificationsOrdered: DbUserQualification[] = [
+  DbUserQualification.EmergencyRoom,
+  DbUserQualification.IntensiveCareUnit,
+  DbUserQualification.ThirdService,
+  DbUserQualification.SeniorPhysician,
+];
+
 export const qualificationsGerman: Record<DbUserQualification, string> = {
   [DbUserQualification.EmergencyRoom]: 'Notaufnahme',
   [DbUserQualification.IntensiveCareUnit]: 'Intensivstation',

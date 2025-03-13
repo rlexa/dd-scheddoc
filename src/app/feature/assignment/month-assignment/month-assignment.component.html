@@ -1,0 +1,23 @@
+<table cellSpacing="0">
+  <tr class="sticky">
+    <th class="day">Tag</th>
+    @for (quali of qualifications; track quali) {
+      <th>{{ qualificationsGerman[quali] }}</th>
+    }
+  </tr>
+  @for (day of days; track $index) {
+    @let holiday = day | toHoliday;
+
+    <tr>
+      <td class="day" [class.weekend]="day | isWeekend" [class.holiday]="!!holiday">
+        <span>{{ day | date: 'dd ccc' }}</span>
+        @if (holiday) {
+          <mat-icon class="sd-margin-left-default" [matTooltip]="holiday">liquor</mat-icon>
+        }
+      </td>
+      @for (quali of qualifications; track quali) {
+        <td class="icon-only"></td>
+      }
+    </tr>
+  }
+</table>

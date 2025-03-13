@@ -1,4 +1,5 @@
 @let selectedDate = selectedDate$ | async;
+@let days = selectedDate | toMonthDays;
 
 <div class="sd-padding-wide sd-list-v sd-gap-wide">
   <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
@@ -12,11 +13,5 @@
     <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button> -->
   </div>
 
-  TODO
-
-  <!-- <app-month
-    [dateMonth]="selectedDate"
-    [calendar]="formValue$ | async"
-    (changeAvailability)="setAvailability(id, $event.date, $event.value)"
-  /> -->
+  <app-month-assignment [dateMonth]="selectedDate" [days]="days" />
 </div>
