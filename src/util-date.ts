@@ -44,3 +44,34 @@ export function dateToEndOfMonth(from: Date | string | number) {
   return asDate(`${dateToDatePart(val)}T23:59:59.999`);
 }
 export const dateToEndOfMonthDatePart = (from: Date | string | number) => dateToDatePart(dateToEndOfMonth(from));
+
+/** Returns `yyyy-mm-ddT00:00:00.000` array around the current month at index 1. */
+export function generateCurrentMonths() {
+  const now = new Date();
+  const next0 = new Date(now);
+  next0.setMonth(now.getMonth() + 1);
+  const next1 = new Date(now);
+  next1.setMonth(now.getMonth() + 2);
+  const next2 = new Date(now);
+  next2.setMonth(now.getMonth() + 3);
+
+  return [now, next0, next1, next2].map(
+    (ii) => `${strPadStartWithZero4(ii.getFullYear().toString())}-${strPadStartWithZero2((ii.getMonth() + 1).toString())}T00:00:00.000`,
+  );
+}
+
+/** Returns `yyyy-mm-ddT00:00:00.000` array with all days in a month. */
+export function generateDaysOfMonth(date: Date) {
+  if (!date) {
+    return [] as string[];
+  }
+
+  const dateMonth = new Date(date);
+  const year = strPadStartWithZero4(dateMonth.getFullYear().toString());
+  const month = strPadStartWithZero2((dateMonth.getMonth() + 1).toString());
+  dateMonth.setMonth(dateMonth.getMonth() + 1);
+  dateMonth.setDate(1);
+  dateMonth.setDate(dateMonth.getDate() - 1);
+  const max = dateMonth.getDate();
+  return new Array(max).fill('').map((_, index) => `${year}-${month}-${strPadStartWithZero2((index + 1).toString())}T00:00:00.000`);
+}

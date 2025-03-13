@@ -15,6 +15,7 @@
 
     <app-month
       [dateMonth]="selectedDate"
+      [days]="selectedDate | toMonthDays"
       [calendar]="formValue$ | async"
       (changeAvailability)="setAvailability(id, $event.date, $event.value)"
     />

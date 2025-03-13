@@ -11,8 +11,9 @@ import {combineLatest, debounceTime, distinctUntilChanged, map, of, Subject, swi
 import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {collectionCalendar, DbUserAvailability} from 'src/app/data/db';
-import {fanOut, strPadStartWithZero2, strPadStartWithZero4} from 'src/util';
-import {msSecond} from 'src/util-date';
+import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
+import {fanOut} from 'src/util';
+import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {CalendarFormService} from './calendar-form.service';
 import {MonthComponent} from './month';
 
@@ -21,7 +22,16 @@ import {MonthComponent} from './month';
   templateUrl: './calendar.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, MatButtonModule, MatButtonToggleModule, MatIconModule, MatSnackBarModule, MonthComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MonthComponent,
+    ToMonthDaysPipe,
+  ],
   providers: [CalendarFormService],
 })
 export class CalendarComponent implements OnInit, OnDestroy {
@@ -112,17 +122,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         }
       });
 
-    const now = new Date();
-    const next0 = new Date(now);
-    next0.setMonth(now.getMonth() + 1);
-    const next1 = new Date(now);
-    next1.setMonth(now.getMonth() + 2);
-    const next2 = new Date(now);
-    next2.setMonth(now.getMonth() + 3);
-
-    this.dates = [now, next0, next1, next2].map(
-      (ii) => `${strPadStartWithZero4(ii.getFullYear().toString())}-${strPadStartWithZero2((ii.getMonth() + 1).toString())}T00:00:00.000`,
-    );
+    this.dates = generateCurrentMonths();
     this.selectedDate$.next(this.dates[1]);
   }
 
