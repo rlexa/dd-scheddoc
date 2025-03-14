@@ -8,6 +8,7 @@ import {
   DbUser,
   DbUserAvailability,
   DbUserQualification,
+  isQualificationEligible,
   qualificationsGerman,
   qualificationsOrdered,
   userAvailabilitiesGerman,
@@ -68,12 +69,14 @@ export class MonthAssignmentComponent {
   protected readonly qualiToUsersMap = computed(
     () => {
       const users = this.userEntries();
-      const testUsers = users.filter((uu) => !!uu.id && uu.qualification === DbUserQualification.Test);
 
       return Object.values(DbUserQualification)
         .filter((ii) => ii !== DbUserQualification.Test)
         .reduce<Record<DbUserQualification, DbUser[]>>(
-          (acc, quali) => ({...acc, [quali]: [...users.filter((uu) => !!uu.id && uu.qualification === quali), ...testUsers]}),
+          (acc, quali) => ({
+            ...acc,
+            [quali]: users.filter((uu) => !!uu.id && isQualificationEligible(uu.qualification, quali)),
+          }),
           {} as Record<DbUserQualification, DbUser[]>,
         );
     },

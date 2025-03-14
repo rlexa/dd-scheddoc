@@ -59,6 +59,26 @@ export const qualificationsGerman: Record<DbUserQualification, string> = {
   [DbUserQualification.ThirdService]: '3. Dienst',
 };
 
+const qualificationEligibles: Record<DbUserQualification, DbUserQualification[]> = {
+  [DbUserQualification.EmergencyRoom]: [DbUserQualification.Test, DbUserQualification.EmergencyRoom],
+  [DbUserQualification.IntensiveCareUnit]: [
+    DbUserQualification.Test,
+    DbUserQualification.EmergencyRoom,
+    DbUserQualification.IntensiveCareUnit,
+  ],
+  [DbUserQualification.SeniorPhysician]: [DbUserQualification.Test, DbUserQualification.SeniorPhysician],
+  [DbUserQualification.Test]: [DbUserQualification.Test],
+  [DbUserQualification.ThirdService]: [
+    DbUserQualification.Test,
+    DbUserQualification.EmergencyRoom,
+    DbUserQualification.IntensiveCareUnit,
+    DbUserQualification.ThirdService,
+  ],
+};
+
+export const isQualificationEligible = (qualification: DbUserQualification | null | undefined, target: DbUserQualification) =>
+  !!qualification && qualificationEligibles[target].includes(qualification);
+
 export const userAvailabilitiesOrdered: DbUserAvailability[] = [
   DbUserAvailability.Must,
   DbUserAvailability.Want,
