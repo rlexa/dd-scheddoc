@@ -10,8 +10,9 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {combineLatest, debounceTime, distinctUntilChanged, map, of, Subject, switchMap} from 'rxjs';
 import {DiDbCalendars, DiDbCalendarsTrigger, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
-import {collectionCalendar, DbUserQualification} from 'src/app/data/db';
+import {collectionCalendar, DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
+import {downloadBlob} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
 import {MonthAssignmentComponent} from './month-assignment';
@@ -123,4 +124,26 @@ export class AssignmentComponent implements OnInit, OnDestroy {
     this.formService.changeFreeze(day, quali, user);
 
   protected readonly setSelectedDate = (val: string) => this.selectedDate$.next(val);
+
+  protected download(days: string[], entries: DbCalendar[], users: DbUser[] | null) {
+    const csv = [
+      `Tag;${qualificationsOrdered.map((ii) => qualificationsGerman[ii]).join(';')}`,
+      ...days
+        .map((day) => day.substring(0, 'yyyy-mm-dd'.length))
+        .map((day) =>
+          [
+            day,
+            ...qualificationsOrdered.map((quali) => {
+              const entry = entries.find((ee) => ee.day === day && ee.frozenAs === quali);
+              if (entry) {
+                return users?.find((uu) => uu.id === entry.user)?.name ?? entry.user;
+              }
+              return '';
+            }),
+          ].join(';'),
+        ),
+    ].join('\n');
+
+    downloadBlob(new Blob([csv], {type: 'text/csv'}), 'zuweisungen.csv');
+  }
 }
