@@ -12,7 +12,8 @@ import {DiDbCalendars, DiDbCalendarsTrigger, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {collectionCalendar, DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
-import {downloadBlob} from 'src/util';
+import {Environment} from 'src/environments/environment';
+import {downloadBlob, fanOut, jsonEqual} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
 import {MonthAssignmentComponent} from './month-assignment';
@@ -42,7 +43,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   private readonly formService = inject(AssignmentFormService);
   private readonly matSnackBar = inject(MatSnackBar);
   protected readonly selectedDate$ = inject(DiSelectedDate);
-  protected readonly users$ = inject(DiDbUsers);
+  private readonly usersAll$ = inject(DiDbUsers);
 
   private readonly saveTrigger$ = new Subject<void>();
 
@@ -52,6 +53,12 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   protected readonly canSave$ = combineLatest([this.formService.hasChanges$, this.formService.valid$]).pipe(
     map(([hasChanges, valid]) => hasChanges && valid),
     distinctUntilChanged(),
+  );
+
+  protected readonly users$ = this.usersAll$.pipe(
+    map((iis) => iis.filter((user) => Environment.withTestUsers || user.qualification !== DbUserQualification.Test)),
+    distinctUntilChanged(jsonEqual),
+    fanOut(),
   );
 
   protected dates: string[] = [];
