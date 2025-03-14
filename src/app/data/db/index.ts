@@ -32,7 +32,7 @@ export type DbUserKey = keyof DbUser;
 export interface DbCalendar {
   availability?: DbUserAvailability | null;
   day?: string | null;
-  frozen?: boolean | null;
+  frozenAs?: DbUserQualification | null;
   id?: string | null;
   user?: string | null;
 }

@@ -22,12 +22,12 @@
 
         <td
           class="icon-only"
-          [class.clickable]="!entry?.frozen"
-          (click)="!entry?.frozen ? setAvailability(day, avail === entry?.availability ? null : avail) : 0"
+          [class.clickable]="!entry?.frozenAs"
+          (click)="!entry?.frozenAs ? setAvailability(day, avail === entry?.availability ? null : avail) : 0"
         >
           @if (entry) {
             @if (entry.availability === avail) {
-              @if (entry.frozen) {
+              @if (entry.frozenAs) {
                 <mat-icon>done_all</mat-icon>
               } @else {
                 <mat-icon>check</mat-icon>

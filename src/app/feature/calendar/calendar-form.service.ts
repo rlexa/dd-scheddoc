@@ -16,13 +16,13 @@ export class CalendarFormService extends ObjectFormService<DbCalendar[]> {
       }
     } else {
       if (target) {
-        if (!target.frozen) {
+        if (!target.frozenAs) {
           target.availability = value;
           this.model$.next(val);
         }
       } else if (val) {
         this.model$.next(
-          [...val, {availability: value, day, frozen: false, user}].sort((aa, bb) => (aa.day ?? '').localeCompare(bb.day ?? '')),
+          [...val, {availability: value, day, frozenAs: null, user}].sort((aa, bb) => (aa.day ?? '').localeCompare(bb.day ?? '')),
         );
       }
     }
