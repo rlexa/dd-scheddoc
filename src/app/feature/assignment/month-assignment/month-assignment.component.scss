@@ -31,6 +31,7 @@ table {
       &.day {
         font-family: monospace;
         min-width: 4.5rem;
+        vertical-align: middle;
       }
 
       &.icon-only {
@@ -46,6 +47,7 @@ table {
     &.sticky {
       position: sticky;
       top: 0;
+      z-index: 1;
       background: var(--mat-sys-surface);
     }
 

@@ -10,3 +10,19 @@
   row-gap: var(--sd-gap-default);
   box-sizing: border-box;
 }
+
+.in-cell {
+  &.mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background-color: transparent;
+
+      .mdc-line-ripple::before {
+        border-bottom-color: transparent;
+      }
+    }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}

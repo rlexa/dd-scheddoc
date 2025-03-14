@@ -1,4 +1,3 @@
-@let idToUser = idToUserMap();
 @let qualiToUsers = qualiToUsersMap();
 
 <table cellSpacing="0">
@@ -10,7 +9,7 @@
   </tr>
   @for (day of days; track $index) {
     @let holiday = day | toHoliday;
-    @let entries = dayEntryMap()[day];
+    @let entries = dayEntryMap()[day] ?? [];
 
     <tr>
       <td class="day" [class.weekend]="day | isWeekend" [class.holiday]="!!holiday">
@@ -20,9 +19,26 @@
         }
       </td>
       @for (quali of qualifications; track quali) {
-        @let users = qualiToUsers[quali];
+        @let candidates = qualiToUsers[quali] | usersFilterByCalendars: entries;
 
-        <td [matTooltip]="users.length + ''"></td>
+        <td class="icon-only">
+          @if (!candidates.length) {
+            <mat-icon [style.color]="'var(--sd-color-warning)'">sentiment_very_dissatisfied</mat-icon>
+          } @else {
+            <mat-form-field class="in-cell">
+              <mat-select>
+                <mat-option [value]="undefined">-</mat-option>
+                @for (user of candidates; track $index) {
+                  @let entry = user | userCalendar: entries;
+
+                  <mat-option [value]="user.id">
+                    {{ (user.name ?? '???') + ': ' + availabilitiesGerman[entry?.availability ?? DbUserAvailability.None] }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </td>
       }
     </tr>
   }
