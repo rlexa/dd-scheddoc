@@ -6,8 +6,8 @@ export class UsersFilterByCalendarsPipe implements PipeTransform {
   transform(value: DbUser[], calendars: DbCalendar[]) {
     return value
       .filter((user) => {
-        const calendar = calendars.filter((cc) => cc.user === user.id);
-        return !calendar.length || calendar.every((cc) => cc.availability !== DbUserAvailability.Cant);
+        const calendar = calendars.find((cc) => cc.user === user.id);
+        return !calendar || calendar.availability !== DbUserAvailability.Cant;
       })
       .sort((aa, bb) => {
         const aaAvail = calendars.find((cc) => cc.user === aa.id)?.availability ?? DbUserAvailability.None;
