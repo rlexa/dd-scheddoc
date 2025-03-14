@@ -8,6 +8,7 @@ table {
       height: 1.5rem;
       vertical-align: bottom;
       width: 5rem;
+      border-bottom: 1px solid transparent;
 
       mat-icon {
         vertical-align: bottom;
@@ -46,6 +47,13 @@ table {
       position: sticky;
       top: 0;
       background: var(--mat-sys-surface);
+    }
+
+    &:hover {
+      th,
+      td {
+        border-bottom-color: var(--mat-sys-neutral10);
+      }
     }
   }
 }

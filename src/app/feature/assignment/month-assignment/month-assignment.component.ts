@@ -42,11 +42,23 @@ export class MonthAssignmentComponent {
     {equal: jsonEqual},
   );
 
-  protected readonly userMap = computed(
+  protected readonly idToUserMap = computed(
     () =>
       this.userEntries()
         .filter((ii) => ii.id)
         .reduce<Record<string, DbUser>>((acc, ii) => ({...acc, [ii.id!]: ii}), {}),
+    {equal: jsonEqual},
+  );
+
+  protected readonly qualiToUsersMap = computed(
+    () => {
+      const users = this.userEntries();
+
+      return Object.values(DbUserQualification).reduce<Record<DbUserQualification, DbUser[]>>(
+        (acc, quali) => ({...acc, [quali]: users.filter((uu) => !!uu.id && uu.qualification === quali)}),
+        {} as Record<DbUserQualification, DbUser[]>,
+      );
+    },
     {equal: jsonEqual},
   );
 }
