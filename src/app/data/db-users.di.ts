@@ -1,8 +1,11 @@
 import {inject, InjectionToken} from '@angular/core';
-import {collection, collectionData, Firestore, orderBy, query} from '@angular/fire/firestore';
+import {collection, collectionData, Firestore, orderBy, query, where} from '@angular/fire/firestore';
 import {catchError, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap} from 'rxjs';
+import {Environment} from 'src/environments/environment';
 import {fanOut, jsonEqual} from 'src/util';
-import {collectionUser, DbUser, DbUserKey} from './db';
+import {collectionUser, DbUser, DbUserKey, DbUserQualification} from './db';
+
+const withTestUsers = Environment.withTestUsers;
 
 export const DiDbUsersTrigger = new InjectionToken<Subject<void>>('DB users trigger.', {
   providedIn: 'root',
@@ -11,6 +14,7 @@ export const DiDbUsersTrigger = new InjectionToken<Subject<void>>('DB users trig
 
 const idField: DbUserKey = 'id';
 const keyOrderBy: DbUserKey = 'name';
+const keyQuali: DbUserKey = 'qualification';
 
 export const DiDbUsers = new InjectionToken<Observable<DbUser[]>>('DB users.', {
   providedIn: 'root',
@@ -23,7 +27,12 @@ export const DiDbUsers = new InjectionToken<Observable<DbUser[]>>('DB users.', {
     return trigger$.pipe(
       startWith('meh'),
       switchMap(() =>
-        collectionData(query(ref, orderBy(keyOrderBy)), {idField}).pipe(
+        collectionData(
+          withTestUsers
+            ? query(ref, orderBy(keyOrderBy))
+            : query(ref, where(keyQuali, '!=', DbUserQualification.Test), orderBy(keyOrderBy)),
+          {idField},
+        ).pipe(
           map((ii) => (ii ?? []) as DbUser[]),
           catchError((err) => {
             console.error('Failed to fetch DB users.', err);

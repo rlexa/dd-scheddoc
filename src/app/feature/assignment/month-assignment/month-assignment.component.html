@@ -20,7 +20,9 @@
         }
       </td>
       @for (quali of qualifications; track quali) {
-        <td class="icon-only"></td>
+        @let users = qualiToUsers[quali];
+
+        <td [matTooltip]="users.length + ''"></td>
       }
     </tr>
   }
