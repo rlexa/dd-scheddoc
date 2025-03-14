@@ -1,5 +1,6 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, Input, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -16,6 +17,7 @@ import {
 import {IsWeekendPipe} from 'src/app/shared/is-weekend';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
 import {jsonEqual} from 'src/util';
+import {FindFrozenQualificationPipe} from './find-frozen-qualification.pipe';
 import {UserCalendarPipe} from './user-calendar.pipe';
 import {UsersFilterByCalendarsPipe} from './users-filter-by-calendars.pipe';
 
@@ -26,6 +28,8 @@ import {UsersFilterByCalendarsPipe} from './users-filter-by-calendars.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    FindFrozenQualificationPipe,
+    FormsModule,
     IsWeekendPipe,
     MatIconModule,
     MatSelectModule,
@@ -49,6 +53,8 @@ export class MonthAssignmentComponent {
   @Input() set users(val: DbUser[] | null | undefined) {
     this.userEntries.set(val ?? []);
   }
+
+  @Output() readonly changeFreeze = new EventEmitter<{day: string; quali: DbUserQualification; user: string | null}>();
 
   protected readonly DbUserAvailability = DbUserAvailability;
   protected readonly availabilitiesGerman = userAvailabilitiesGerman;
@@ -82,4 +88,6 @@ export class MonthAssignmentComponent {
     },
     {equal: jsonEqual},
   );
+
+  protected readonly freeze = (day: string, quali: DbUserQualification, user: string | null) => this.changeFreeze.emit({day, quali, user});
 }

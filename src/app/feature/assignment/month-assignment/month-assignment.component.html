@@ -25,8 +25,10 @@
           @if (!candidates.length) {
             <mat-icon [style.color]="'var(--sd-color-warning)'">sentiment_very_dissatisfied</mat-icon>
           } @else {
+            @let currentlyFrozenUser = candidates | findFrozenQualification: entries : quali;
+
             <mat-form-field class="in-cell">
-              <mat-select>
+              <mat-select [ngModel]="currentlyFrozenUser?.id" (ngModelChange)="freeze(day, quali, $event ?? null)">
                 <mat-option [value]="undefined">-</mat-option>
                 @for (user of candidates; track $index) {
                   @let entry = user | userCalendar: entries;

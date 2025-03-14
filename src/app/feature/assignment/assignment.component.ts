@@ -9,6 +9,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {combineLatest, distinctUntilChanged, map, Subject} from 'rxjs';
 import {DiDbCalendars, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
+import {DbUserQualification} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {generateCurrentMonths} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
@@ -65,6 +66,9 @@ export class AssignmentComponent implements OnInit, OnDestroy {
 
   protected readonly reset = () => this.formService.reset();
   protected readonly save = () => this.saveTrigger$.next();
+
+  protected readonly changeFreeze = (day: string, quali: DbUserQualification, user: string | null) =>
+    this.formService.changeFreeze(day, quali, user);
 
   protected readonly setSelectedDate = (val: string) => this.selectedDate$.next(val);
 }

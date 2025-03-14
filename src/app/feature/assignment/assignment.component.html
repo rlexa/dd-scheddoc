@@ -13,5 +13,11 @@
     <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
   </div>
 
-  <app-month-assignment [dateMonth]="selectedDate" [days]="days" [calendars]="formValue$ | async" [users]="users$ | async" />
+  <app-month-assignment
+    [dateMonth]="selectedDate"
+    [days]="days"
+    [calendars]="formValue$ | async"
+    [users]="users$ | async"
+    (changeFreeze)="changeFreeze($event.day, $event.quali, $event.user)"
+  />
 </div>
