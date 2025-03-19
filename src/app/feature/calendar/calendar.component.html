@@ -1,26 +1,38 @@
-@if (id$ | async; as id) {
-  @let selectedDate = selectedDate$ | async;
-  @let days = selectedDate | toMonthDays;
-  @let formValue = formValue$ | async;
+@let selectedDate = selectedDate$ | async;
+@let days = selectedDate | toMonthDays;
+@let formValue = formValue$ | async;
+@let id = selectedUserId$ | async;
 
-  <div class="sd-padding-wide sd-list-v sd-gap-wide">
-    <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
-      <mat-button-toggle-group name="Monat" [ngModel]="selectedDate" (ngModelChange)="setSelectedDate($event)">
-        @for (dat of dates; track $index) {
-          <mat-button-toggle [value]="dat">{{ dat | date: 'MMMM' }}</mat-button-toggle>
-        }
-      </mat-button-toggle-group>
+<div class="sd-padding-wide sd-list-v sd-gap-wide">
+  <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
+    @if (isAdmin$ | async) {
+      <mat-form-field class="in-cell">
+        <mat-select [ngModel]="id" (ngModelChange)="setSelectedUserId($event ?? null)">
+          <mat-option [value]="undefined">-</mat-option>
+          @for (user of users$ | async; track $index) {
+            <mat-option [value]="user.id">{{ user.name ?? '???' }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
 
-      <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
-      <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
-      <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!)"><mat-icon>download</mat-icon></button>
-    </div>
+    <mat-button-toggle-group name="Monat" [ngModel]="selectedDate" (ngModelChange)="setSelectedDate($event)">
+      @for (dat of dates; track $index) {
+        <mat-button-toggle [value]="dat">{{ dat | date: 'MMMM' }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
 
+    <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
+    <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+    <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!)"><mat-icon>download</mat-icon></button>
+  </div>
+
+  @if (id) {
     <app-month
       [dateMonth]="selectedDate"
       [days]="days"
       [calendar]="formValue"
       (changeAvailability)="setAvailability(id, $event.date, $event.value)"
     />
-  </div>
-}
+  }
+</div>

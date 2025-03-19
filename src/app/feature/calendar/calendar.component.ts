@@ -6,13 +6,14 @@ import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {combineLatest, debounceTime, distinctUntilChanged, map, of, Subject, switchMap} from 'rxjs';
-import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser} from 'src/app/data';
-import {DiSelectedDate} from 'src/app/data/active';
+import {combineLatest, debounceTime, distinctUntilChanged, filter, map, of, Subject, switchMap, take} from 'rxjs';
+import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser, DiDbUsers, DiIsAdmin} from 'src/app/data';
+import {DiSelectedDate, DiSelectedUserId} from 'src/app/data/active';
 import {collectionCalendar, DbCalendar, DbUserAvailability, userAvailabilitiesGerman, userAvailabilitiesOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
-import {downloadBlob, fanOut} from 'src/util';
+import {downloadBlob, notNullUndefined} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {CalendarFormService} from './calendar-form.service';
 import {MonthComponent} from './month';
@@ -28,6 +29,7 @@ import {MonthComponent} from './month';
     MatButtonModule,
     MatButtonToggleModule,
     MatIconModule,
+    MatSelectModule,
     MatSnackBarModule,
     MonthComponent,
     ToMonthDaysPipe,
@@ -41,16 +43,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly firestore = inject(Firestore);
   private readonly formService = inject(CalendarFormService);
+  protected readonly isAdmin$ = inject(DiIsAdmin);
   private readonly matSnackBar = inject(MatSnackBar);
   protected readonly selectedDate$ = inject(DiSelectedDate);
+  protected readonly selectedUserId$ = inject(DiSelectedUserId);
+  protected readonly users$ = inject(DiDbUsers);
 
   private readonly saveTrigger$ = new Subject<void>();
-
-  protected readonly id$ = this.dbUser$.pipe(
-    map((ii) => ii?.id ?? null),
-    distinctUntilChanged(),
-    fanOut(),
-  );
 
   protected readonly formValue$ = this.formService.value$;
   protected readonly canReset$ = this.formService.canReset$;
@@ -65,10 +64,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.saveTrigger$.complete();
     this.selectedDate$.next(null);
+    this.selectedUserId$.next(null);
   }
 
   ngOnInit() {
     this.dbCalendar$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ii) => this.formService.setSource(ii));
+
+    this.dbUser$
+      .pipe(filter(notNullUndefined), take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => this.selectedUserId$.next(user.id ?? null));
 
     combineLatest([this.dbCalendar$, this.formService.value$])
       .pipe(
@@ -133,6 +137,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.formService.setAvailability(user, date, value);
 
   protected readonly setSelectedDate = (val: string) => this.selectedDate$.next(val);
+  protected readonly setSelectedUserId = (id: string | null) => this.selectedUserId$.next(id);
 
   protected download(days: string[], entries: DbCalendar[]) {
     const csv = [
