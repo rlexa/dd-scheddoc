@@ -9,10 +9,12 @@
   </tr>
   @for (day of days; track $index) {
     @let holiday = day | toHoliday;
+    @let weekend = day | isWeekend;
+    @let workday = !holiday && !weekend;
     @let entries = dayEntryMap()[day] ?? [];
 
     <tr>
-      <td class="day" [class.weekend]="day | isWeekend" [class.holiday]="!!holiday">
+      <td class="day" [class.weekend]="weekend" [class.holiday]="!!holiday">
         <span>{{ day | date: 'dd ccc' }}</span>
         @if (holiday) {
           <mat-icon class="sd-margin-left-default" [matTooltip]="holiday">liquor</mat-icon>
@@ -27,18 +29,26 @@
           } @else {
             @let currentlyFrozenUser = candidates | findFrozenQualification: entries : quali;
 
-            <mat-form-field class="in-cell">
-              <mat-select [ngModel]="currentlyFrozenUser?.id" (ngModelChange)="freeze(day, quali, $event ?? null)">
-                <mat-option [value]="undefined">-</mat-option>
-                @for (user of candidates; track $index) {
-                  @let entry = user | userCalendar: entries;
+            @if (workday && quali === DbUserQualification.ThirdService) {
+              <span>-</span>
+            } @else {
+              <mat-form-field class="in-cell">
+                <mat-select
+                  [ngModel]="currentlyFrozenUser?.id"
+                  (ngModelChange)="freeze(day, quali, $event ?? null)"
+                  [disabled]="workday && quali === DbUserQualification.ThirdService"
+                >
+                  <mat-option [value]="undefined">-</mat-option>
+                  @for (user of candidates; track $index) {
+                    @let entry = user | userCalendar: entries;
 
-                  <mat-option [value]="user.id">
-                    {{ (user.name ?? '???') + ': ' + availabilitiesGerman[entry?.availability ?? DbUserAvailability.None] }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+                    <mat-option [value]="user.id">
+                      {{ (user.name ?? '???') + ': ' + availabilitiesGerman[entry?.availability ?? DbUserAvailability.None] }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            }
           }
         </td>
       }
