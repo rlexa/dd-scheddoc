@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Kandidat hinzufügen</h2>
+<mat-dialog-content>
+  <form class="sd-grid-repeat">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput [formControl]="formGroup.controls.name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Gruppe</mat-label>
+      <mat-select [formControl]="formGroup.controls.group">
+        <mat-option [value]="null">-</mat-option>
+        @for (group of groups; track group) {
+          <mat-option [value]="group">{{ group }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Qualifikation</mat-label>
+      <mat-select [formControl]="formGroup.controls.qualification">
+        <mat-option [value]="null">-</mat-option>
+        @for (qualification of qualifications; track qualification) {
+          <mat-option [value]="qualification">{{ qualificationsGerman[qualification] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="cancel()">Abbrechen</button>
+  <button mat-button [disabled]="!formGroup.valid" (click)="add()">Hinzufügen</button>
+</mat-dialog-actions>

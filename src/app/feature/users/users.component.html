@@ -8,7 +8,10 @@
   [class.show-name-only]="!!selectedName && !pointerInList"
 >
   @if (!selectedName || pointerInList) {
-    <h5 class="sd-text-ellipsis" [style.text-align]="'center'">Benutzer</h5>
+    <div class="title sd-bar-h sd-gap-default sd-padding-bottom-narrow">
+      <h5 class="sd-text-ellipsis" [style.text-align]="'center'">Benutzer</h5>
+      <button mat-mini-fab (click)="addUser()"><mat-icon>add</mat-icon></button>
+    </div>
 
     <cdk-virtual-scroll-viewport itemSize="50" class="sd-flex-spacer">
       <div

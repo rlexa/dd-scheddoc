@@ -23,6 +23,8 @@ export enum DbUserAvailability {
 export interface DbUser {
   group?: DbUserGroup | null;
   id?: string | null;
+  /** Created manually as user candidate. */
+  isManual?: boolean | null;
   name?: string | null;
   qualification?: DbUserQualification | null;
 }
