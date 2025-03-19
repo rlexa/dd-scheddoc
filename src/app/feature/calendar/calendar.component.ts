@@ -11,7 +11,15 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {combineLatest, debounceTime, distinctUntilChanged, filter, map, of, Subject, switchMap, take} from 'rxjs';
 import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser, DiDbUsers, DiIsAdmin} from 'src/app/data';
 import {DiSelectedDate, DiSelectedUserId} from 'src/app/data/active';
-import {collectionCalendar, DbCalendar, DbUserAvailability, userAvailabilitiesGerman, userAvailabilitiesOrdered} from 'src/app/data/db';
+import {
+  collectionCalendar,
+  DbCalendar,
+  DbUserAvailability,
+  DbUserQualification,
+  qualificationsGerman,
+  userAvailabilitiesGerman,
+  userAvailabilitiesOrdered,
+} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {downloadBlob, notNullUndefined} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
@@ -50,6 +58,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
   protected readonly users$ = inject(DiDbUsers);
 
   private readonly saveTrigger$ = new Subject<void>();
+
+  protected readonly DbUserQualification = DbUserQualification;
+  protected readonly qualificationsGerman = qualificationsGerman;
 
   protected readonly formValue$ = this.formService.value$;
   protected readonly canReset$ = this.formService.canReset$;

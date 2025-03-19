@@ -10,7 +10,9 @@
         <mat-select [ngModel]="id" (ngModelChange)="setSelectedUserId($event ?? null)">
           <mat-option [value]="undefined">-</mat-option>
           @for (user of users$ | async; track $index) {
-            <mat-option [value]="user.id">{{ user.name ?? '???' }}</mat-option>
+            <mat-option [value]="user.id">
+              {{ (user.name ?? '???') + ': ' + qualificationsGerman[user.qualification ?? DbUserQualification.Test] }}
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>
