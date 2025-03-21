@@ -5,6 +5,9 @@
     <h2>{{ user?.name ?? '???' }}</h2>
     <button mat-mini-fab (click)="reset()"><mat-icon>undo</mat-icon></button>
     <button mat-mini-fab (click)="save()" [disabled]="formGroup.invalid"><mat-icon>save</mat-icon></button>
+    @if (user && user.isManual) {
+      <button mat-mini-fab (click)="remove(user)"><mat-icon>delete</mat-icon></button>
+    }
   </div>
   <form class="sd-grid-repeat">
     <mat-form-field>
