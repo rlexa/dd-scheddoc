@@ -53,6 +53,10 @@
   flex-direction: column;
 }
 
+.sd-wrap {
+  flex-wrap: wrap;
+}
+
 .sd-list-item {
   position: relative;
   box-sizing: border-box;
@@ -70,4 +74,10 @@
 
 .sd-border-radius {
   border-radius: 0.3em;
+}
+
+@media (max-width: 500px) {
+  .sd-mobile-invisible {
+    display: none;
+  }
 }

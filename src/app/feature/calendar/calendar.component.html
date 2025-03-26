@@ -4,7 +4,7 @@
 @let id = selectedUserId$ | async;
 
 <div class="sd-padding-wide sd-list-v sd-gap-wide">
-  <div class="sd-bar-h sd-gap-default" [style.align-self]="'center'">
+  <div class="sd-bar-h sd-gap-default sd-wrap" [style.align-self]="'center'" [style.justify-content]="'center'">
     @if (isAdmin$ | async) {
       <mat-form-field class="in-cell">
         <mat-select [ngModel]="id" (ngModelChange)="setSelectedUserId($event ?? null)">
@@ -24,9 +24,11 @@
       }
     </mat-button-toggle-group>
 
-    <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
-    <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
-    <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!)"><mat-icon>download</mat-icon></button>
+    <div class="sd-bar-h sd-gap-default sd-wrap">
+      <button mat-mini-fab [disabled]="!!!(canReset$ | async)" (click)="reset()"><mat-icon>undo</mat-icon></button>
+      <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+      <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!)"><mat-icon>download</mat-icon></button>
+    </div>
   </div>
 
   @if (id) {
