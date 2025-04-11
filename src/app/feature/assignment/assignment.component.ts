@@ -133,6 +133,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   protected readonly setSelectedDate = (val: string) => this.selectedDate$.next(val);
 
   protected readonly calculate = (days: string[], users: DbUser[] | null) => this.formService.tryCalculateAssignments(days, users ?? []);
+  protected readonly clearAll = () => this.formService.clearAll();
 
   protected download(days: string[], entries: DbCalendar[], users: DbUser[] | null) {
     const csv = [

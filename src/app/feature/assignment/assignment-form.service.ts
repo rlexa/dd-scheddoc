@@ -55,6 +55,17 @@ export class AssignmentFormService extends ObjectFormService<DbCalendar[]> {
     }
   }
 
+  clearAll() {
+    const prepared = jsonCopy(this.model$.value) ?? [];
+    const withRemovedNewEntries = prepared.filter((entry) => entry.id);
+    withRemovedNewEntries.forEach((entry) => {
+      if (entry.frozenAs) {
+        entry.frozenAs = null;
+      }
+    });
+    this.model$.next(withRemovedNewEntries);
+  }
+
   tryCalculateAssignments(days: string[], users: DbUser[]) {
     const prepared = jsonCopy(this.model$.value) ?? [];
 
