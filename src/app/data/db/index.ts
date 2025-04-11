@@ -8,6 +8,7 @@ export enum DbUserQualification {
   IntensiveCareUnit = 'IntensiveCareUnit',
   SeniorPhysician = 'SeniorPhysician',
   Test = 'Test',
+  /** Only for weekends and holidays */
   ThirdService = 'ThirdService',
 }
 
@@ -49,9 +50,15 @@ export const collectionUser = 'user';
 export const qualificationsOrdered: DbUserQualification[] = [
   DbUserQualification.IntensiveCareUnit,
   DbUserQualification.EmergencyRoom,
-  /** Only for weekends and holidays */
   DbUserQualification.ThirdService,
   DbUserQualification.SeniorPhysician,
+];
+
+export const qualificationsOrderedForAutoAssignment: DbUserQualification[] = [
+  DbUserQualification.SeniorPhysician,
+  DbUserQualification.IntensiveCareUnit,
+  DbUserQualification.EmergencyRoom,
+  DbUserQualification.ThirdService,
 ];
 
 export const qualificationsGerman: Record<DbUserQualification, string> = {
@@ -91,6 +98,15 @@ export const userAvailabilitiesOrdered: DbUserAvailability[] = [
   DbUserAvailability.None,
 ];
 
+export const userAvailabilitiesOrderedForCandidates: DbUserAvailability[] = [
+  DbUserAvailability.Must,
+  DbUserAvailability.Want,
+  DbUserAvailability.Can,
+  DbUserAvailability.None,
+  DbUserAvailability.Wont,
+  DbUserAvailability.Cant,
+];
+
 export const userAvailabilitiesGerman: Record<DbUserAvailability, string> = {
   [DbUserAvailability.Can]: 'Kann',
   [DbUserAvailability.Cant]: 'Nein',
@@ -99,3 +115,8 @@ export const userAvailabilitiesGerman: Record<DbUserAvailability, string> = {
   [DbUserAvailability.Want]: 'Will',
   [DbUserAvailability.Wont]: 'Will nicht',
 };
+
+export const isConsideredSameAvailability = (aaAvail: DbUserAvailability, bbAvail: DbUserAvailability) =>
+  aaAvail === bbAvail ||
+  ([DbUserAvailability.None, DbUserAvailability.Can].includes(aaAvail) &&
+    [DbUserAvailability.None, DbUserAvailability.Can].includes(bbAvail));

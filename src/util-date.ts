@@ -1,3 +1,4 @@
+import {getHolidayByDate} from 'feiertagejs';
 import {strPadStartWithZero2, strPadStartWithZero4} from './util';
 
 export const msSecond = 1_000;
@@ -45,6 +46,8 @@ export function dateToEndOfMonth(from: Date | string | number) {
 }
 export const dateToEndOfMonthDatePart = (from: Date | string | number) => dateToDatePart(dateToEndOfMonth(from));
 
+export const isWeekend = (val: Date | string | number) => [0, 6].includes(asDate(val).getDay());
+
 /** Returns `yyyy-mm-ddT00:00:00.000` array around the current month at index 1. */
 export function generateCurrentMonths() {
   const now = new Date();
@@ -75,3 +78,7 @@ export function generateDaysOfMonth(date: Date) {
   const max = dateMonth.getDate();
   return new Array(max).fill('').map((_, index) => `${year}-${month}-${strPadStartWithZero2((index + 1).toString())}T00:00:00.000`);
 }
+
+// #region 3rd party
+
+export const getHoliday = (value: string | Date | number) => getHolidayByDate(asDate(value), 'HE')?.translate('de');
