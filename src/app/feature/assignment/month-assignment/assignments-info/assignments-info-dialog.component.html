@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Zuweisungen</h2>
+<mat-dialog-content>
+  <table>
+    @for (user of data.users; track $index) {
+      <tr>
+        <td class="sd-padding-right-wide">{{ user.name }}</td>
+        <td [style.text-align]="'center'" [style.font-family]="'monospace'">{{ user | userFrozenEntriesCount: data.entries }}</td>
+      </tr>
+    }
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="close()">OK</button>
+</mat-dialog-actions>

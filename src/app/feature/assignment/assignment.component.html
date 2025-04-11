@@ -16,6 +16,7 @@
       <button mat-mini-fab (click)="calculate(days, users)"><mat-icon>functions</mat-icon></button>
       <button mat-mini-fab (click)="clearAll()"><mat-icon>delete</mat-icon></button>
       <button mat-mini-fab [disabled]="!!!(canSave$ | async)" (click)="save()"><mat-icon>save</mat-icon></button>
+      <button mat-mini-fab [disabled]="!formValue || !users" (click)="showInfo(formValue!, users!)"><mat-icon>info</mat-icon></button>
       <button mat-mini-fab [disabled]="!formValue" (click)="download(days, formValue!, users)"><mat-icon>download</mat-icon></button>
     </div>
   </div>

@@ -5,9 +5,10 @@ import {collection, doc, Firestore, writeBatch} from '@angular/fire/firestore';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {combineLatest, debounceTime, distinctUntilChanged, map, of, Subject, switchMap} from 'rxjs';
+import {catchError, combineLatest, debounceTime, distinctUntilChanged, exhaustMap, map, of, Subject, switchMap} from 'rxjs';
 import {DiDbCalendars, DiDbCalendarsTrigger, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {collectionCalendar, DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
@@ -17,6 +18,7 @@ import {downloadBlob, fanOut, jsonEqual} from 'src/util';
 import {generateCurrentMonths, msSecond} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
 import {MonthAssignmentComponent} from './month-assignment';
+import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from './month-assignment/assignments-info';
 
 @Component({
   selector: 'app-assignment',
@@ -28,6 +30,7 @@ import {MonthAssignmentComponent} from './month-assignment';
     FormsModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatDialogModule,
     MatIconModule,
     MatSnackBarModule,
     MonthAssignmentComponent,
@@ -41,10 +44,12 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly firestore = inject(Firestore);
   private readonly formService = inject(AssignmentFormService);
+  private readonly matDialog = inject(MatDialog);
   private readonly matSnackBar = inject(MatSnackBar);
   protected readonly selectedDate$ = inject(DiSelectedDate);
   private readonly usersAll$ = inject(DiDbUsers);
 
+  private readonly infoTrigger$ = new Subject<AssignmentsInfoDialogComponentData>();
   private readonly saveTrigger$ = new Subject<void>();
 
   protected readonly formValue$ = this.formService.value$;
@@ -64,6 +69,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   protected dates: string[] = [];
 
   ngOnDestroy() {
+    this.infoTrigger$.complete();
     this.saveTrigger$.complete();
     this.selectedDate$.next(null);
   }
@@ -120,12 +126,24 @@ export class AssignmentComponent implements OnInit, OnDestroy {
         }
       });
 
+    this.infoTrigger$
+      .pipe(
+        exhaustMap((data) =>
+          this.matDialog
+            .open(AssignmentsInfoDialogComponent, {data})
+            .afterClosed()
+            .pipe(catchError(() => of('meh'))),
+        ),
+      )
+      .subscribe();
+
     this.dates = generateCurrentMonths();
     this.selectedDate$.next(this.dates[1]);
   }
 
   protected readonly reset = () => this.formService.reset();
   protected readonly save = () => this.saveTrigger$.next();
+  protected readonly showInfo = (entries: DbCalendar[], users: DbUser[]) => this.infoTrigger$.next({entries, users});
 
   protected readonly changeFreeze = (day: string, quali: DbUserQualification, user: string | null) =>
     this.formService.changeFreeze(day, quali, user);
