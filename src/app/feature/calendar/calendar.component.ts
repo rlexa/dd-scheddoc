@@ -1,18 +1,16 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {collection, doc, Firestore, writeBatch} from '@angular/fire/firestore';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {combineLatest, debounceTime, distinctUntilChanged, filter, map, of, Subject, switchMap, take} from 'rxjs';
-import {DiDbCalendar, DiDbCalendarTrigger, DiDbUser, DiDbUsers, DiIsAdmin} from 'src/app/data';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {combineLatest, distinctUntilChanged, filter, map, take} from 'rxjs';
+import {DiDbCalendar, DiDbUser, DiDbUsers, DiIsAdmin} from 'src/app/data';
 import {DiSelectedDate, DiSelectedUserId} from 'src/app/data/active';
 import {
-  collectionCalendar,
   DbCalendar,
   DbUserAvailability,
   DbUserQualification,
@@ -22,8 +20,9 @@ import {
 } from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {downloadBlob, notNullUndefined} from 'src/util';
-import {generateCurrentMonths, msSecond} from 'src/util-date';
+import {generateCurrentMonths} from 'src/util-date';
 import {CalendarFormService} from './calendar-form.service';
+import {CalendarSaveActionService} from './calendar-save-action.service';
 import {MonthComponent} from './month';
 
 @Component({
@@ -42,22 +41,18 @@ import {MonthComponent} from './month';
     MonthComponent,
     ToMonthDaysPipe,
   ],
-  providers: [CalendarFormService],
+  providers: [CalendarFormService, CalendarSaveActionService],
 })
 export class CalendarComponent implements OnInit, OnDestroy {
   private readonly dbCalendar$ = inject(DiDbCalendar);
-  private readonly dbCalendarTrigger$ = inject(DiDbCalendarTrigger);
   private readonly dbUser$ = inject(DiDbUser);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly firestore = inject(Firestore);
   private readonly formService = inject(CalendarFormService);
   protected readonly isAdmin$ = inject(DiIsAdmin);
-  private readonly matSnackBar = inject(MatSnackBar);
+  private readonly saveActionService = inject(CalendarSaveActionService);
   protected readonly selectedDate$ = inject(DiSelectedDate);
   protected readonly selectedUserId$ = inject(DiSelectedUserId);
   protected readonly users$ = inject(DiDbUsers);
-
-  private readonly saveTrigger$ = new Subject<void>();
 
   protected readonly DbUserQualification = DbUserQualification;
   protected readonly qualificationsGerman = qualificationsGerman;
@@ -70,10 +65,9 @@ export class CalendarComponent implements OnInit, OnDestroy {
     distinctUntilChanged(),
   );
 
-  protected dates: string[] = [];
+  protected readonly dates = generateCurrentMonths();
 
   ngOnDestroy() {
-    this.saveTrigger$.complete();
     this.selectedDate$.next(null);
     this.selectedUserId$.next(null);
   }
@@ -85,64 +79,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
       .pipe(filter(notNullUndefined), take(1), takeUntilDestroyed(this.destroyRef))
       .subscribe((user) => this.selectedUserId$.next(user.id ?? null));
 
-    combineLatest([this.dbCalendar$, this.formService.value$])
-      .pipe(
-        debounceTime(0),
-        switchMap(([source, model]) =>
-          this.saveTrigger$.pipe(
-            switchMap(async () => {
-              if (!source || !model) {
-                return of(null);
-              }
-
-              const batch = writeBatch(this.firestore);
-
-              source.forEach((ii) => {
-                if (ii.id) {
-                  const mm = model.find((mm) => mm.id === ii.id);
-                  if (!mm) {
-                    const docRef = doc(this.firestore, collectionCalendar, ii.id);
-                    batch.delete(docRef);
-                  } else if (ii.availability !== mm.availability) {
-                    const docRef = doc(this.firestore, collectionCalendar, ii.id);
-                    batch.update(docRef, {availability: mm.availability});
-                  }
-                }
-              });
-
-              model
-                .filter((mm) => !mm.id)
-                .forEach((mm) => {
-                  const colRef = collection(this.firestore, collectionCalendar);
-                  const docRef = doc(colRef);
-                  batch.set(docRef, mm);
-                });
-
-              try {
-                batch.commit();
-                return true;
-              } catch (err) {
-                console.error('Failed to write calendar.', err);
-                return false;
-              }
-            }),
-          ),
-        ),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((success) => {
-        if (success) {
-          this.matSnackBar.open('Kalendar gespeichert.', 'OK', {duration: 2 * msSecond});
-          this.dbCalendarTrigger$.next();
-        }
-      });
-
-    this.dates = generateCurrentMonths();
     this.selectedDate$.next(this.dates[1]);
   }
 
   protected readonly reset = () => this.formService.reset();
-  protected readonly save = () => this.saveTrigger$.next();
+  protected readonly save = () => this.saveActionService.trigger();
 
   protected readonly setAvailability = (user: string, date: string, value: DbUserAvailability | null) =>
     this.formService.setAvailability(user, date, value);

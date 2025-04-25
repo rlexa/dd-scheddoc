@@ -66,7 +66,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
     fanOut(),
   );
 
-  protected dates: string[] = [];
+  protected readonly dates = generateCurrentMonths();
 
   ngOnDestroy() {
     this.infoTrigger$.complete();
@@ -137,7 +137,6 @@ export class AssignmentComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.dates = generateCurrentMonths();
     this.selectedDate$.next(this.dates[1]);
   }
 
