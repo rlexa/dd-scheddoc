@@ -7,7 +7,7 @@ import {ConfirmDialogComponent} from './confirm-dialog.component';
 export class ConfirmService {
   private readonly matDialog = inject(MatDialog);
 
-  confirm$ = () =>
+  readonly confirm$ = () =>
     this.matDialog
       .open(ConfirmDialogComponent, {
         autoFocus: '.mat-mdc-dialog-actions > button:first-child',

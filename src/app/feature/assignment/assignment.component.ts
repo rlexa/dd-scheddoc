@@ -4,7 +4,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {combineLatest, distinctUntilChanged, map} from 'rxjs';
 import {DiDbCalendars, DiDbUsers} from 'src/app/data';
@@ -24,16 +23,7 @@ import {MonthAssignmentComponent} from './month-assignment';
   templateUrl: './assignment.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatDialogModule,
-    MatIconModule,
-    MonthAssignmentComponent,
-    ToMonthDaysPipe,
-  ],
+  imports: [CommonModule, FormsModule, MatButtonModule, MatButtonToggleModule, MatIconModule, MonthAssignmentComponent, ToMonthDaysPipe],
   providers: [AssignmentFormService, AssignmentInfoActionService, AssignmentSaveActionService],
 })
 export class AssignmentComponent implements OnInit, OnDestroy {
