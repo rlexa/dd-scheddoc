@@ -6,7 +6,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {catchError, combineLatest, distinctUntilChanged, exhaustMap, map, of, Subject} from 'rxjs';
 import {DiDbCalendars, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
@@ -32,7 +31,6 @@ import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from
     MatButtonToggleModule,
     MatDialogModule,
     MatIconModule,
-    MatSnackBarModule,
     MonthAssignmentComponent,
     ToMonthDaysPipe,
   ],
