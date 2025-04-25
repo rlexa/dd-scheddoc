@@ -4,9 +4,9 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {catchError, combineLatest, distinctUntilChanged, exhaustMap, map, of, Subject} from 'rxjs';
+import {combineLatest, distinctUntilChanged, map} from 'rxjs';
 import {DiDbCalendars, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
@@ -15,9 +15,9 @@ import {Environment} from 'src/environments/environment';
 import {downloadBlob, fanOut, jsonEqual} from 'src/util';
 import {generateCurrentMonths} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
+import {AssignmentInfoActionService} from './assignment-info-action.service';
 import {AssignmentSaveActionService} from './assignment-save-action.service';
 import {MonthAssignmentComponent} from './month-assignment';
-import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from './month-assignment/assignments-info';
 
 @Component({
   selector: 'app-assignment',
@@ -34,18 +34,16 @@ import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from
     MonthAssignmentComponent,
     ToMonthDaysPipe,
   ],
-  providers: [AssignmentFormService, AssignmentSaveActionService],
+  providers: [AssignmentFormService, AssignmentInfoActionService, AssignmentSaveActionService],
 })
 export class AssignmentComponent implements OnInit, OnDestroy {
   private readonly calendars$ = inject(DiDbCalendars);
   private readonly destroyRef = inject(DestroyRef);
   private readonly formService = inject(AssignmentFormService);
-  private readonly matDialog = inject(MatDialog);
+  private readonly infoActionService = inject(AssignmentInfoActionService);
   private readonly saveActionService = inject(AssignmentSaveActionService);
   protected readonly selectedDate$ = inject(DiSelectedDate);
   private readonly usersAll$ = inject(DiDbUsers);
-
-  private readonly infoTrigger$ = new Subject<AssignmentsInfoDialogComponentData>();
 
   protected readonly formValue$ = this.formService.value$;
   protected readonly canReset$ = this.formService.canReset$;
@@ -64,30 +62,18 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   protected readonly dates = generateCurrentMonths();
 
   ngOnDestroy() {
-    this.infoTrigger$.complete();
     this.selectedDate$.next(null);
   }
 
   ngOnInit() {
     this.calendars$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ii) => this.formService.setSource(ii));
 
-    this.infoTrigger$
-      .pipe(
-        exhaustMap((data) =>
-          this.matDialog
-            .open(AssignmentsInfoDialogComponent, {data})
-            .afterClosed()
-            .pipe(catchError(() => of('meh'))),
-        ),
-      )
-      .subscribe();
-
     this.selectedDate$.next(this.dates[1]);
   }
 
   protected readonly reset = () => this.formService.reset();
   protected readonly save = () => this.saveActionService.trigger();
-  protected readonly showInfo = (entries: DbCalendar[], users: DbUser[]) => this.infoTrigger$.next({entries, users});
+  protected readonly showInfo = (entries: DbCalendar[], users: DbUser[]) => this.infoActionService.trigger({entries, users});
 
   protected readonly changeFreeze = (day: string, quali: DbUserQualification, user: string | null) =>
     this.formService.changeFreeze(day, quali, user);
