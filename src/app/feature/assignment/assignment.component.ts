@@ -1,22 +1,22 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {collection, doc, Firestore, writeBatch} from '@angular/fire/firestore';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {catchError, combineLatest, debounceTime, distinctUntilChanged, exhaustMap, map, of, Subject, switchMap} from 'rxjs';
-import {DiDbCalendars, DiDbCalendarsTrigger, DiDbUsers} from 'src/app/data';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {catchError, combineLatest, distinctUntilChanged, exhaustMap, map, of, Subject} from 'rxjs';
+import {DiDbCalendars, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
-import {collectionCalendar, DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
+import {DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {Environment} from 'src/environments/environment';
 import {downloadBlob, fanOut, jsonEqual} from 'src/util';
-import {generateCurrentMonths, msSecond} from 'src/util-date';
+import {generateCurrentMonths} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
+import {AssignmentSaveActionService} from './assignment-save-action.service';
 import {MonthAssignmentComponent} from './month-assignment';
 import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from './month-assignment/assignments-info';
 
@@ -36,21 +36,18 @@ import {AssignmentsInfoDialogComponent, AssignmentsInfoDialogComponentData} from
     MonthAssignmentComponent,
     ToMonthDaysPipe,
   ],
-  providers: [AssignmentFormService],
+  providers: [AssignmentFormService, AssignmentSaveActionService],
 })
 export class AssignmentComponent implements OnInit, OnDestroy {
   private readonly calendars$ = inject(DiDbCalendars);
-  private readonly calendarsTrigger$ = inject(DiDbCalendarsTrigger);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly firestore = inject(Firestore);
   private readonly formService = inject(AssignmentFormService);
   private readonly matDialog = inject(MatDialog);
-  private readonly matSnackBar = inject(MatSnackBar);
+  private readonly saveActionService = inject(AssignmentSaveActionService);
   protected readonly selectedDate$ = inject(DiSelectedDate);
   private readonly usersAll$ = inject(DiDbUsers);
 
   private readonly infoTrigger$ = new Subject<AssignmentsInfoDialogComponentData>();
-  private readonly saveTrigger$ = new Subject<void>();
 
   protected readonly formValue$ = this.formService.value$;
   protected readonly canReset$ = this.formService.canReset$;
@@ -70,61 +67,11 @@ export class AssignmentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.infoTrigger$.complete();
-    this.saveTrigger$.complete();
     this.selectedDate$.next(null);
   }
 
   ngOnInit() {
     this.calendars$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((ii) => this.formService.setSource(ii));
-
-    combineLatest([this.calendars$, this.formService.value$])
-      .pipe(
-        debounceTime(0),
-        switchMap(([source, model]) =>
-          this.saveTrigger$.pipe(
-            switchMap(async () => {
-              if (!source || !model) {
-                return of(null);
-              }
-
-              const batch = writeBatch(this.firestore);
-
-              source.forEach((ii) => {
-                if (ii.id) {
-                  const mm = model.find((mm) => mm.id === ii.id);
-                  if (mm && ii.frozenAs !== mm.frozenAs) {
-                    const docRef = doc(this.firestore, collectionCalendar, ii.id);
-                    batch.update(docRef, {frozenAs: mm.frozenAs});
-                  }
-                }
-              });
-
-              model
-                .filter((mm) => !mm.id)
-                .forEach((mm) => {
-                  const colRef = collection(this.firestore, collectionCalendar);
-                  const docRef = doc(colRef);
-                  batch.set(docRef, mm);
-                });
-
-              try {
-                batch.commit();
-                return true;
-              } catch (err) {
-                console.error('Failed to write assignments.', err);
-                return false;
-              }
-            }),
-          ),
-        ),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((success) => {
-        if (success) {
-          this.matSnackBar.open('Zuweisungen gespeichert.', 'OK', {duration: 2 * msSecond});
-          this.calendarsTrigger$.next();
-        }
-      });
 
     this.infoTrigger$
       .pipe(
@@ -141,7 +88,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   }
 
   protected readonly reset = () => this.formService.reset();
-  protected readonly save = () => this.saveTrigger$.next();
+  protected readonly save = () => this.saveActionService.trigger();
   protected readonly showInfo = (entries: DbCalendar[], users: DbUser[]) => this.infoTrigger$.next({entries, users});
 
   protected readonly changeFreeze = (day: string, quali: DbUserQualification, user: string | null) =>
