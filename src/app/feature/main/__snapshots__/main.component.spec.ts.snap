@@ -16,6 +16,14 @@ exports[`MainComponent renders 1`] = `
           </a>
           <a
             mat-button=""
+            ng-reflect-router-link="as"
+            ng-reflect-router-link-active="active"
+            routerlinkactive="active"
+          >
+            Zuweisung
+          </a>
+          <a
+            mat-button=""
             ng-reflect-router-link="us"
             ng-reflect-router-link-active="active"
             routerlinkactive="active"
@@ -27,7 +35,7 @@ exports[`MainComponent renders 1`] = `
           class="sd-flex-spacer"
         />
         <span
-          class="sd-margin-left-wide sd-margin-right-wide"
+          class="sd-margin-left-wide sd-margin-right-wide sd-mobile-invisible"
         >
           SchedDoc
         </span>
