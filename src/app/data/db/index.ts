@@ -70,18 +70,14 @@ export const qualificationsGerman: Record<DbUserQualification, string> = {
 };
 
 const qualificationEligibles: Record<DbUserQualification, DbUserQualification[]> = {
-  [DbUserQualification.EmergencyRoom]: [DbUserQualification.Test, DbUserQualification.EmergencyRoom],
-  [DbUserQualification.IntensiveCareUnit]: [
-    DbUserQualification.Test,
-    DbUserQualification.EmergencyRoom,
-    DbUserQualification.IntensiveCareUnit,
-  ],
+  [DbUserQualification.EmergencyRoom]: [DbUserQualification.Test, DbUserQualification.IntensiveCareUnit, DbUserQualification.EmergencyRoom],
+  [DbUserQualification.IntensiveCareUnit]: [DbUserQualification.Test, DbUserQualification.IntensiveCareUnit],
   [DbUserQualification.SeniorPhysician]: [DbUserQualification.Test, DbUserQualification.SeniorPhysician],
   [DbUserQualification.Test]: [DbUserQualification.Test],
   [DbUserQualification.ThirdService]: [
     DbUserQualification.Test,
-    DbUserQualification.EmergencyRoom,
     DbUserQualification.IntensiveCareUnit,
+    DbUserQualification.EmergencyRoom,
     DbUserQualification.ThirdService,
   ],
 };
