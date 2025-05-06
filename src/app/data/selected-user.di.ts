@@ -1,6 +1,6 @@
 import {inject, InjectionToken} from '@angular/core';
+import {jsonEqual, rxFanOut} from 'dd-rxjs';
 import {combineLatest, distinctUntilChanged, map, Observable} from 'rxjs';
-import {fanOut, jsonEqual} from 'src/util';
 import {DiSelectedUserId} from './active';
 import {DbUser} from './db';
 import {DiDbUsers} from './db-users.di';
@@ -14,7 +14,7 @@ export const DiSelectedUser = new InjectionToken<Observable<DbUser | null>>('Sel
     return combineLatest([id$, dbUsers$]).pipe(
       map(([id, users]) => (!id ? null : (users.find((ii) => ii.id === id) ?? null))),
       distinctUntilChanged(jsonEqual),
-      fanOut(),
+      rxFanOut(),
     );
   },
 });

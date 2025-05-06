@@ -1,7 +1,7 @@
 import {DestroyRef, inject, Injectable, OnDestroy} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {jsonEqual, rxFanOut} from 'dd-rxjs';
 import {BehaviorSubject, combineLatest, distinctUntilChanged, map, startWith, Subject, switchMap} from 'rxjs';
-import {fanOut, jsonEqual} from 'src/util';
 
 @Injectable()
 export class ObjectFormService<T extends object> implements OnDestroy {
@@ -23,7 +23,7 @@ export class ObjectFormService<T extends object> implements OnDestroy {
   ]).pipe(
     map(([source, value]) => !!source && !!value && !jsonEqual(source, value)),
     distinctUntilChanged(),
-    fanOut(),
+    rxFanOut(),
   );
 
   readonly canReset$ = this.hasChanges$;
@@ -34,7 +34,7 @@ export class ObjectFormService<T extends object> implements OnDestroy {
         distinctUntilChanged(jsonEqual),
         map((model) => !!model && (!fnValidate || fnValidate(model))),
         distinctUntilChanged(),
-        fanOut(),
+        rxFanOut(),
       ),
     ),
   );

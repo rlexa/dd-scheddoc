@@ -5,13 +5,14 @@ import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
+import {jsonEqual, rxFanOut} from 'dd-rxjs';
 import {combineLatest, distinctUntilChanged, map} from 'rxjs';
 import {DiDbCalendars, DiDbUsers} from 'src/app/data';
 import {DiSelectedDate} from 'src/app/data/active';
 import {DbCalendar, DbUser, DbUserQualification, qualificationsGerman, qualificationsOrdered} from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
 import {Environment} from 'src/environments/environment';
-import {downloadBlob, fanOut, jsonEqual} from 'src/util';
+import {downloadBlob} from 'src/util';
 import {generateCurrentMonths} from 'src/util-date';
 import {AssignmentFormService} from './assignment-form.service';
 import {AssignmentInfoActionService} from './assignment-info-action.service';
@@ -46,7 +47,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
   protected readonly users$ = this.usersAll$.pipe(
     map((iis) => iis.filter((user) => Environment.withTestUsers || user.qualification !== DbUserQualification.Test)),
     distinctUntilChanged(jsonEqual),
-    fanOut(),
+    rxFanOut(),
   );
 
   protected readonly dates = generateCurrentMonths();

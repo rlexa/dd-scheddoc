@@ -7,9 +7,9 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {notNullUndefined} from 'dd-rxjs';
 import {filter, startWith, Subject, switchMap} from 'rxjs';
 import {collectionUser, DbUser, DbUserGroup, DbUserQualification, qualificationsGerman} from 'src/app/data/db';
-import {notNullUndefined} from 'src/util';
 import {msSecond} from 'src/util-date';
 
 @Component({

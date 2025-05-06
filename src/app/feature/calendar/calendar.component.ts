@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
+import {notNullUndefined} from 'dd-rxjs';
 import {combineLatest, distinctUntilChanged, filter, map, take} from 'rxjs';
 import {DiDbCalendar, DiDbUser, DiDbUsers, DiIsAdmin} from 'src/app/data';
 import {DiSelectedDate, DiSelectedUserId} from 'src/app/data/active';
@@ -18,7 +19,7 @@ import {
   userAvailabilitiesOrdered,
 } from 'src/app/data/db';
 import {ToMonthDaysPipe} from 'src/app/shared/to-month-days';
-import {downloadBlob, notNullUndefined} from 'src/util';
+import {downloadBlob} from 'src/util';
 import {generateCurrentMonths} from 'src/util-date';
 import {CalendarFormService} from './calendar-form.service';
 import {CalendarSaveActionService} from './calendar-save-action.service';

@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^19.2.9",
     "@angular/platform-browser-dynamic": "^19.2.9",
     "@angular/router": "^19.2.9",
+    "dd-rxjs": "^1.5.4",
     "feiertagejs": "^1.4.1",
     "normalize.css": "^8.0.1",
     "rxjs": "~7.8.0",

@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {jsonEqual} from 'dd-rxjs';
 import {
   DbCalendar,
   DbUser,
@@ -16,7 +17,6 @@ import {
 } from 'src/app/data/db';
 import {IsWeekendPipe} from 'src/app/shared/is-weekend';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
-import {jsonEqual} from 'src/util';
 import {FindFrozenQualificationPipe} from './find-frozen-qualification.pipe';
 import {UserCalendarPipe} from './user-calendar.pipe';
 import {UsersFilterByCalendarsPipe} from './users-filter-by-calendars.pipe';

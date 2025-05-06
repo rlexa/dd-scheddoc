@@ -1,7 +1,7 @@
 import {inject, InjectionToken} from '@angular/core';
 import {collection, collectionData, Firestore, orderBy, query, where} from '@angular/fire/firestore';
+import {jsonEqual, rxFanOut} from 'dd-rxjs';
 import {catchError, combineLatest, distinctUntilChanged, map, Observable, of, startWith, Subject, switchMap} from 'rxjs';
-import {fanOut, jsonEqual} from 'src/util';
 import {dateToEndOfMonthDatePart, dateToStartOfMonthDatePart} from 'src/util-date';
 import {DiSelectedDate, DiSelectedUserId} from './active';
 import {collectionCalendar, DbCalendar, DbCalendarKey} from './db';
@@ -54,7 +54,7 @@ export const DiDbCalendar = new InjectionToken<Observable<DbCalendar[]>>('DB cal
         ),
       ),
       distinctUntilChanged(jsonEqual),
-      fanOut(),
+      rxFanOut(),
     );
   },
 });

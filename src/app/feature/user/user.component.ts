@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
+import {notNullUndefined} from 'dd-rxjs';
 import {combineLatest, distinctUntilChanged, exhaustMap, filter, map, startWith, Subject, switchMap} from 'rxjs';
 import {DiDbUser, DiSelectedUser} from 'src/app/data';
 import {DiSelectedUserId} from 'src/app/data/active';
@@ -22,7 +23,6 @@ import {
 } from 'src/app/data/db';
 import {ConfirmService} from 'src/app/shared/confirm';
 import {RouteParamUserId} from 'src/routing';
-import {notNullUndefined} from 'src/util';
 import {msSecond} from 'src/util-date';
 
 const keyCalendarUser: DbCalendarKey = 'user';

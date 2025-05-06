@@ -2,10 +2,10 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {jsonEqual} from 'dd-rxjs';
 import {DbCalendar, DbUserAvailability, userAvailabilitiesGerman, userAvailabilitiesOrdered} from 'src/app/data/db';
 import {IsWeekendPipe} from 'src/app/shared/is-weekend';
 import {ToHolidayPipe} from 'src/app/shared/to-holiday';
-import {jsonEqual} from 'src/util';
 
 @Component({
   selector: 'app-month',
