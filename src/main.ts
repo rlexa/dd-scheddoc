@@ -1,5 +1,5 @@
 import {provideHttpClient} from '@angular/common/http';
-import {LOCALE_ID, provideAppInitializer, provideExperimentalZonelessChangeDetection} from '@angular/core';
+import {LOCALE_ID, provideAppInitializer, provideNgReflectAttributes, provideZonelessChangeDetection} from '@angular/core';
 import {initializeApp, provideFirebaseApp} from '@angular/fire/app';
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
@@ -13,7 +13,8 @@ bootstrapApplication(AppComponent, {
   providers: [
     // ng
     provideHttpClient(),
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
+    provideNgReflectAttributes(), // <<< for test snapshots only
     // 3rd party
     provideFirebaseApp(() =>
       initializeApp({
