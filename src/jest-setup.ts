@@ -1,11 +1,19 @@
+import {provideNgReflectAttributes} from '@angular/core';
+import {TestBed} from '@angular/core/testing';
 import {setupZoneTestEnv} from 'jest-preset-angular/setup-env/zone';
 import {Mock} from 'ts-mockery';
+import 'whatwg-fetch'; // <<< installed because of firestore libs
 import './jest-global-mocks';
-
-Object.defineProperty(window, 'DragEvent', {
-  value: class DragEvent {},
-});
 
 Mock.configure('jest');
 
-setupZoneTestEnv();
+setupZoneTestEnv(); // <<< zone.js installed because of this
+
+beforeEach(() => {
+  TestBed.configureTestingModule({
+    providers: [
+      // below: needed for better snapshots
+      provideNgReflectAttributes(),
+    ],
+  });
+});

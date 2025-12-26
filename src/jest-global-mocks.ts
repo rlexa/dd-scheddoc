@@ -1,3 +1,7 @@
+Object.defineProperty(window, 'DragEvent', {
+  value: class DragEvent {},
+});
+
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
