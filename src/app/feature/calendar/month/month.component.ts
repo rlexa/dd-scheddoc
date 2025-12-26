@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, EventEmitter, input, Input, Output} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {jsonEqual} from 'dd-rxjs';
@@ -15,14 +15,10 @@ import {ToHolidayPipe} from 'src/app/shared/to-holiday';
   imports: [CommonModule, IsWeekendPipe, MatIconModule, MatTooltipModule, ToHolidayPipe],
 })
 export class MonthComponent {
-  private readonly calendarEntries = signal<DbCalendar[]>([], {equal: jsonEqual});
+  readonly calendar = input<DbCalendar[] | null | undefined>(undefined);
 
   @Input() dateMonth?: string | null;
   @Input() days?: string[] | null;
-
-  @Input() set calendar(val: DbCalendar[] | null | undefined) {
-    this.calendarEntries.set(val ?? []);
-  }
 
   @Output() readonly changeAvailability = new EventEmitter<{date: string; value: DbUserAvailability | null}>();
 
@@ -32,7 +28,7 @@ export class MonthComponent {
 
   protected readonly dbEntries = computed(
     () =>
-      this.calendarEntries().reduce<Record<string, DbCalendar | undefined>>((acc, ii) => ({...acc, [`${ii.day}T00:00:00.000`]: ii}), {}),
+      (this.calendar() ?? []).reduce<Record<string, DbCalendar | undefined>>((acc, ii) => ({...acc, [`${ii.day}T00:00:00.000`]: ii}), {}),
     {equal: jsonEqual},
   );
 

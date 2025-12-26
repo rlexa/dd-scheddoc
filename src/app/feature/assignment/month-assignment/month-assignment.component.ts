@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, EventEmitter, Input, Output, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, EventEmitter, input, Input, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
@@ -40,19 +40,11 @@ import {UsersFilterByCalendarsPipe} from './users-filter-by-calendars.pipe';
   ],
 })
 export class MonthAssignmentComponent {
-  private readonly calendarEntries = signal<DbCalendar[]>([], {equal: jsonEqual});
-  private readonly userEntries = signal<DbUser[]>([], {equal: jsonEqual});
+  readonly calendars = input<DbCalendar[] | null | undefined>(undefined);
+  readonly users = input<DbUser[] | null | undefined>(undefined);
 
   @Input() dateMonth?: string | null;
   @Input() days?: string[] | null;
-
-  @Input() set calendars(val: DbCalendar[] | null | undefined) {
-    this.calendarEntries.set(val ?? []);
-  }
-
-  @Input() set users(val: DbUser[] | null | undefined) {
-    this.userEntries.set(val ?? []);
-  }
 
   @Output() readonly changeFreeze = new EventEmitter<{day: string; quali: DbUserQualification; user: string | null}>();
 
@@ -65,7 +57,7 @@ export class MonthAssignmentComponent {
 
   protected readonly dayEntryMap = computed(
     () =>
-      this.calendarEntries().reduce<Record<string, DbCalendar[] | undefined>>((acc, ii) => {
+      (this.calendars() ?? []).reduce<Record<string, DbCalendar[] | undefined>>((acc, ii) => {
         const key = `${ii.day}T00:00:00.000`;
         return {...acc, [key]: [...(acc[key] ?? []), ii]};
       }, {}),
@@ -74,7 +66,7 @@ export class MonthAssignmentComponent {
 
   protected readonly qualiToUsersMap = computed(
     () => {
-      const users = this.userEntries();
+      const users = this.users() ?? [];
 
       return Object.values(DbUserQualification)
         .filter((ii) => ii !== DbUserQualification.Test)
