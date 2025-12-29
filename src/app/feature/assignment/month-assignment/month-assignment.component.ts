@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, EventEmitter, input, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, input, output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
@@ -40,13 +40,12 @@ import {UsersFilterByCalendarsPipe} from './users-filter-by-calendars.pipe';
   ],
 })
 export class MonthAssignmentComponent {
-  readonly calendars = input<DbCalendar[] | null | undefined>(undefined);
-  readonly users = input<DbUser[] | null | undefined>(undefined);
+  readonly calendars = input<DbCalendar[] | null>();
+  readonly dateMonth = input<string | null>();
+  readonly days = input<string[] | null>();
+  readonly users = input<DbUser[] | null>();
 
-  @Input() dateMonth?: string | null;
-  @Input() days?: string[] | null;
-
-  @Output() readonly changeFreeze = new EventEmitter<{day: string; quali: DbUserQualification; user: string | null}>();
+  readonly changeFreeze = output<{day: string; quali: DbUserQualification; user: string | null}>();
 
   protected readonly DbUserAvailability = DbUserAvailability;
   protected readonly availabilitiesGerman = userAvailabilitiesGerman;

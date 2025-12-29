@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, DestroyRef, inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, OnDestroy, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {collection, deleteDoc, doc, Firestore, getDocs, query, updateDoc, where, writeBatch} from '@angular/fire/firestore';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -22,7 +22,6 @@ import {
   qualificationsGerman,
 } from 'src/app/data/db';
 import {ConfirmService} from 'src/app/shared/confirm';
-import {RouteParamUserId} from 'src/routing';
 import {msSecond} from 'src/util-date';
 
 const keyCalendarUser: DbCalendarKey = 'user';
@@ -49,8 +48,11 @@ export class UserComponent implements OnDestroy, OnInit {
   private readonly reset$ = new Subject<void>();
   private readonly save$ = new Subject<void>();
 
-  @Input({alias: RouteParamUserId}) set id(val: string | null | undefined) {
-    this.id$.next(val ?? null);
+  /** Name should satisfy `RouteParams` type (routed parameter) */
+  readonly idUser = input<string | null>();
+
+  constructor() {
+    effect(() => this.id$.next(this.idUser() ?? null));
   }
 
   protected readonly formGroup = new FormGroup({

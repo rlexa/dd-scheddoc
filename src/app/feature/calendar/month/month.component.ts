@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, computed, EventEmitter, input, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, input, output} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {jsonEqual} from 'dd-rxjs';
@@ -15,12 +15,11 @@ import {ToHolidayPipe} from 'src/app/shared/to-holiday';
   imports: [CommonModule, IsWeekendPipe, MatIconModule, MatTooltipModule, ToHolidayPipe],
 })
 export class MonthComponent {
-  readonly calendar = input<DbCalendar[] | null | undefined>(undefined);
+  readonly calendar = input<DbCalendar[] | null>();
+  readonly dateMonth = input<string | null>();
+  readonly days = input<string[] | null>();
 
-  @Input() dateMonth?: string | null;
-  @Input() days?: string[] | null;
-
-  @Output() readonly changeAvailability = new EventEmitter<{date: string; value: DbUserAvailability | null}>();
+  readonly changeAvailability = output<{date: string; value: DbUserAvailability | null}>();
 
   protected readonly DbUserAvailability = DbUserAvailability;
   protected readonly availabilities = userAvailabilitiesOrdered;

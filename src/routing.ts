@@ -3,4 +3,6 @@ export const RouteCalendar = 'ca';
 export const RouteMain = 'ui';
 export const RouteUsers = 'us';
 
-export const RouteParamUserId = 'idUser';
+export type RouteParams = 'idUser';
+
+export const RouteParamUserId: RouteParams = 'idUser';

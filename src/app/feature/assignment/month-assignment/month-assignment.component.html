@@ -7,7 +7,7 @@
       <th>{{ qualificationsGerman[quali] }}</th>
     }
   </tr>
-  @for (day of days; track $index) {
+  @for (day of days(); track $index) {
     @let holiday = day | toHoliday;
     @let weekend = day | isWeekend;
     @let workday = !holiday && !weekend;

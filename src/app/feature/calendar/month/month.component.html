@@ -7,7 +7,7 @@
       <th>{{ userAvailabilitiesGerman[avail] }}</th>
     }
   </tr>
-  @for (day of days; track $index) {
+  @for (day of days(); track $index) {
     @let holiday = day | toHoliday;
 
     <tr>
