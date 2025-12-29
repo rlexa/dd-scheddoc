@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --stats-json",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "vitest",
     "lint": "ng lint"
   },
   "private": true,
@@ -39,7 +39,6 @@
     "ng-mocks": "^14.15.0",
     "prettier": "^3.7.4",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "ts-mockery": "^2.0.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.33.1",

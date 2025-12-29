@@ -1,5 +1,4 @@
 import {TestBed} from '@angular/core/testing';
-import {MockBuilder} from 'ng-mocks';
 import {firstValueFrom} from 'rxjs';
 import {ObjectFormService} from './object-form.service';
 
@@ -10,9 +9,8 @@ const data = {
 describe('ObjectFormService', () => {
   let instance: ObjectFormService<object>;
 
-  beforeEach(() => MockBuilder(ObjectFormService));
-
   beforeEach(() => {
+    TestBed.configureTestingModule({providers: [ObjectFormService]});
     instance = TestBed.inject(ObjectFormService);
   });
 
