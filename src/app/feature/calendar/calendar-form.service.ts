@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
+import {jsonCopy} from 'dd-nodom/lib/common';
 import {DbCalendar, DbUserAvailability} from 'src/app/data/db';
 import {ObjectFormService} from 'src/app/shared/object-form-service';
-import {jsonCopy} from 'src/util';
 import {dateToDatePart} from 'src/util-date';
 
 @Injectable()

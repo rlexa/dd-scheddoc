@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {jsonCopy} from 'dd-nodom/lib/common';
 import {
   DbCalendar,
   DbUser,
@@ -11,7 +12,6 @@ import {
 } from 'src/app/data/db';
 import {ObjectFormService} from 'src/app/shared/object-form-service';
 import {Environment} from 'src/environments/environment';
-import {jsonCopy} from 'src/util';
 import {dateToDatePart, getHoliday, isWeekend} from 'src/util-date';
 
 @Injectable()

@@ -7,10 +7,10 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {msSecond} from 'dd-nodom/lib/date';
 import {notNullUndefined} from 'dd-rxjs';
 import {filter, startWith, Subject, switchMap} from 'rxjs';
 import {collectionUser, DbUser, DbUserGroup, DbUserQualification, qualificationsGerman} from 'src/app/data/db';
-import {msSecond} from 'src/util-date';
 
 @Component({
   selector: 'app-add-user-dialog',

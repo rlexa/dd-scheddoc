@@ -1,35 +1,10 @@
+import {asDate, isWeekendDay} from 'dd-nodom/lib/date';
+import {strPadLeftWithZero2, strPadLeftWithZero4} from 'dd-nodom/lib/str';
 import {getHolidayByDate} from 'feiertagejs';
-import {strPadStartWithZero2, strPadStartWithZero4} from './util';
 
-export const msSecond = 1_000;
-export const msMinute = 60 * msSecond;
-export const msHour = 60 * msMinute;
-export const msDay = 24 * msHour;
-export const msWeek = 7 * msDay;
-
-/** **fyi**: dates without timezone are created as if in local timezone */
-export function asDate(val: Date | string | number): Date;
-export function asDate(val: Date | string | number | null): Date | null;
-export function asDate(val: unknown) {
-  if (val instanceof Date) {
-    return val;
-  }
-
-  if (typeof val === 'number') {
-    return new Date(val);
-  }
-
-  if (typeof val === 'string') {
-    // !!! without 'T' new Date(val) would create it assuming UTC but we want assumption of local timezone
-    return new Date(val.includes('T') ? val : `${val}T00:00:00.000`);
-  }
-
-  return null;
-}
-
-export const dateToYearPart = (from: Date | string | number) => `${strPadStartWithZero4(asDate(from).getFullYear().toString())}`;
-export const dateToMonthPart = (from: Date | string | number) => `${strPadStartWithZero2((asDate(from).getMonth() + 1).toString())}`;
-export const dateToDayPart = (from: Date | string | number) => `${strPadStartWithZero2(asDate(from).getDate().toString())}`;
+export const dateToYearPart = (from: Date | string | number) => `${strPadLeftWithZero4(asDate(from).getFullYear().toString())}`;
+export const dateToMonthPart = (from: Date | string | number) => `${strPadLeftWithZero2((asDate(from).getMonth() + 1).toString())}`;
+export const dateToDayPart = (from: Date | string | number) => `${strPadLeftWithZero2(asDate(from).getDate().toString())}`;
 
 export const dateToDatePart = (from: Date | string | number) => `${dateToYearPart(from)}-${dateToMonthPart(from)}-${dateToDayPart(from)}`;
 
@@ -46,7 +21,7 @@ export function dateToEndOfMonth(from: Date | string | number) {
 }
 export const dateToEndOfMonthDatePart = (from: Date | string | number) => dateToDatePart(dateToEndOfMonth(from));
 
-export const isWeekend = (val: Date | string | number) => [0, 6].includes(asDate(val).getDay());
+export const isWeekend = (val: Date | string | number) => isWeekendDay(asDate(val).getDay());
 
 /** Returns `yyyy-mm-ddT00:00:00.000` array around the current month at index 1. */
 export function generateCurrentMonths() {
@@ -59,7 +34,7 @@ export function generateCurrentMonths() {
   next2.setMonth(now.getMonth() + 3);
 
   return [now, next0, next1, next2].map(
-    (ii) => `${strPadStartWithZero4(ii.getFullYear().toString())}-${strPadStartWithZero2((ii.getMonth() + 1).toString())}T00:00:00.000`,
+    (ii) => `${strPadLeftWithZero4(ii.getFullYear().toString())}-${strPadLeftWithZero2((ii.getMonth() + 1).toString())}T00:00:00.000`,
   );
 }
 
@@ -70,13 +45,13 @@ export function generateDaysOfMonth(date: Date) {
   }
 
   const dateMonth = new Date(date);
-  const year = strPadStartWithZero4(dateMonth.getFullYear().toString());
-  const month = strPadStartWithZero2((dateMonth.getMonth() + 1).toString());
+  const year = strPadLeftWithZero4(dateMonth.getFullYear().toString());
+  const month = strPadLeftWithZero2((dateMonth.getMonth() + 1).toString());
   dateMonth.setMonth(dateMonth.getMonth() + 1);
   dateMonth.setDate(1);
   dateMonth.setDate(dateMonth.getDate() - 1);
   const max = dateMonth.getDate();
-  return new Array(max).fill('').map((_, index) => `${year}-${month}-${strPadStartWithZero2((index + 1).toString())}T00:00:00.000`);
+  return new Array(max).fill('').map((_, index) => `${year}-${month}-${strPadLeftWithZero2((index + 1).toString())}T00:00:00.000`);
 }
 
 // #region 3rd party
