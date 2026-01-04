@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {msSecond} from 'dd-nodom/lib/date';
+import {msSecond} from 'dd-nodom/date';
 import {notNullUndefined} from 'dd-rxjs';
 import {combineLatest, distinctUntilChanged, exhaustMap, filter, map, startWith, Subject, switchMap} from 'rxjs';
 import {DiDbUser, DiSelectedUser} from 'src/app/data';

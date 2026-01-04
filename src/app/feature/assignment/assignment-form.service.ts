@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {jsonCopy} from 'dd-nodom/lib/common';
+import {jsonCopy} from 'dd-nodom/common';
+import {asLocalDatePart} from 'dd-nodom/date';
 import {
   DbCalendar,
   DbUser,
@@ -12,12 +13,12 @@ import {
 } from 'src/app/data/db';
 import {ObjectFormService} from 'src/app/shared/object-form-service';
 import {Environment} from 'src/environments/environment';
-import {dateToDatePart, getHoliday, isWeekend} from 'src/util-date';
+import {getHoliday, isWeekend} from 'src/util-date';
 
 @Injectable()
 export class AssignmentFormService extends ObjectFormService<DbCalendar[]> {
   changeFreeze(date: string, quali: DbUserQualification, user: string | null) {
-    const day = dateToDatePart(date);
+    const day = asLocalDatePart(date);
     const val = jsonCopy(this.model$.value);
 
     if (!user) {
@@ -79,7 +80,7 @@ export class AssignmentFormService extends ObjectFormService<DbCalendar[]> {
       users.reduce<Record<string, number>>((acc, ii) => ({...acc, [ii.id!]: 0}), {}),
     );
 
-    days.map(dateToDatePart).forEach((day) => {
+    days.map(asLocalDatePart).forEach((day) => {
       const isWeekendOrHoliday = isWeekend(day) || !!getHoliday(day);
       const todays = prepared.filter((ii) => ii.day === day);
 

@@ -2,7 +2,7 @@ import {DestroyRef, inject, Injectable, OnDestroy} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {collection, doc, Firestore, writeBatch} from '@angular/fire/firestore';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {msSecond} from 'dd-nodom/lib/date';
+import {msSecond} from 'dd-nodom/date';
 import {combineLatest, debounceTime, of, Subject, switchMap} from 'rxjs';
 import {DiDbCalendar, DiDbCalendarTrigger} from 'src/app/data';
 import {collectionCalendar} from 'src/app/data/db';

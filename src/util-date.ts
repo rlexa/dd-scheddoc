@@ -1,25 +1,26 @@
-import {asDate, isWeekendDay} from 'dd-nodom/lib/date';
-import {strPadLeftWithZero2, strPadLeftWithZero4} from 'dd-nodom/lib/str';
+import {
+  asDate,
+  asDateNonNull,
+  dateEndOfLocalMonth,
+  dateToLocalDatePart,
+  dateToLocalDateString,
+  dateToLocalMonthString,
+  dateToLocalYearString,
+  isWeekendDay,
+} from 'dd-nodom/date';
+import {compose} from 'dd-nodom/fp';
+import {strPadLeftWithZero2, strPadLeftWithZero4} from 'dd-nodom/str';
 import {getHolidayByDate} from 'feiertagejs';
 
-export const dateToYearPart = (from: Date | string | number) => `${strPadLeftWithZero4(asDate(from).getFullYear().toString())}`;
-export const dateToMonthPart = (from: Date | string | number) => `${strPadLeftWithZero2((asDate(from).getMonth() + 1).toString())}`;
-export const dateToDayPart = (from: Date | string | number) => `${strPadLeftWithZero2(asDate(from).getDate().toString())}`;
-
-export const dateToDatePart = (from: Date | string | number) => `${dateToYearPart(from)}-${dateToMonthPart(from)}-${dateToDayPart(from)}`;
+export const dateToYearPart = compose(dateToLocalYearString, asDateNonNull);
+export const dateToMonthPart = compose(dateToLocalMonthString, asDateNonNull);
+export const dateToDayPart = compose(dateToLocalDateString, asDateNonNull);
 
 export const dateToStartOfMonth = (from: Date | string | number) =>
   asDate(`${dateToYearPart(from)}-${dateToMonthPart(from)}-01T00:00:00.000`);
-export const dateToStartOfMonthDatePart = (from: Date | string | number) => dateToDatePart(dateToStartOfMonth(from));
+export const dateToStartOfMonthDatePart = compose(dateToLocalDatePart, dateToStartOfMonth);
 
-export function dateToEndOfMonth(from: Date | string | number) {
-  const val = asDate(from);
-  val.setMonth(val.getMonth() + 1);
-  val.setDate(1);
-  val.setDate(val.getDate() - 1);
-  return asDate(`${dateToDatePart(val)}T23:59:59.999`);
-}
-export const dateToEndOfMonthDatePart = (from: Date | string | number) => dateToDatePart(dateToEndOfMonth(from));
+export const dateToEndOfMonthDatePart = compose(dateToLocalDatePart, dateEndOfLocalMonth, asDateNonNull);
 
 export const isWeekend = (val: Date | string | number) => isWeekendDay(asDate(val).getDay());
 
