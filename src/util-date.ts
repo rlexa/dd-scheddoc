@@ -1,9 +1,9 @@
 import {
   asDate,
   asDateNonNull,
-  dateEndOfLocalMonth,
+  dateMoveToEndOfLocalMonth,
   dateToLocalDatePart,
-  dateToLocalDateString,
+  dateToLocalDayDateString,
   dateToLocalMonthString,
   dateToLocalYearString,
   isWeekendDay,
@@ -14,13 +14,13 @@ import {getHolidayByDate} from 'feiertagejs';
 
 export const dateToYearPart = compose(dateToLocalYearString, asDateNonNull);
 export const dateToMonthPart = compose(dateToLocalMonthString, asDateNonNull);
-export const dateToDayPart = compose(dateToLocalDateString, asDateNonNull);
+export const dateToDayPart = compose(dateToLocalDayDateString, asDateNonNull);
 
 export const dateToStartOfMonth = (from: Date | string | number) =>
   asDate(`${dateToYearPart(from)}-${dateToMonthPart(from)}-01T00:00:00.000`);
 export const dateToStartOfMonthDatePart = compose(dateToLocalDatePart, dateToStartOfMonth);
 
-export const dateToEndOfMonthDatePart = compose(dateToLocalDatePart, dateEndOfLocalMonth, asDateNonNull);
+export const dateToEndOfMonthDatePart = compose(dateToLocalDatePart, dateMoveToEndOfLocalMonth, asDateNonNull);
 
 export const isWeekend = (val: Date | string | number) => isWeekendDay(asDate(val).getDay());
 
